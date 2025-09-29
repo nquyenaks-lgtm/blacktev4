@@ -316,12 +316,12 @@
     <button onclick="closeCustomAlert()">Xác nhận</button>
   </div>
 </div>
-<!-- Firebase v8 SDK -->
+<!-- Firebase SDK v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
-  // Config copy từ Firebase console
+  // Cấu hình từ Firebase console của bạn
   const firebaseConfig = {
     apiKey: "AIzaSyBJ-H3Q34YRJ0-RYkAvKDktvG8q9KRHUCE",
     authDomain: "blacktea-1337.firebaseapp.com",
@@ -332,10 +332,10 @@
     measurementId: "G-LP4FFSZ0XR"
   };
 
-  // Khởi tạo Firebase
+  // 👉 Khởi tạo app
   firebase.initializeApp(firebaseConfig);
 
-  // Kết nối Firestore
+  // 👉 Khởi tạo Firestore
   const db = firebase.firestore();
 </script>
 </body>
