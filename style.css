@@ -1,0 +1,185 @@
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Arial,Helvetica,sans-serif;background:#f6f7fb;color:#222;padding:12px}
+.app{max-width:980px;margin:0 auto}
+header{padding:8px 0}
+h1{font-size:18px}
+h2,h3,h4{margin:8px 0}
+.table-grid{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.table-card{background:#fff;border:1px solid #e6e9ef;padding:10px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.table-info{display:flex;flex-direction:column}
+.table-name{font-weight:700}
+.table-meta{font-size:13px;color:#666;margin-top:4px}
+.category-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.category-btn{padding:6px 10px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:14px}
+.category-btn.active{background:#2b6ef6;color:#fff;border-color:#2b6ef6}
+
+/* Danh sách món: hiển thị 6 dòng rồi cuộn */
+.menu-list{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin-top:8px;
+  max-height:280px;   /* ~ 6 món */
+  overflow-y:auto;
+  padding-right:4px;
+}
+.menu-row{background:#fff;border:1px solid #e6e9ef;padding:6px 8px;border-radius:6px;display:flex;justify-content:space-between;align-items:center}
+.menu-left{display:flex;flex-direction:column}
+.menu-name{font-weight:700;font-size:15px}
+.menu-price{font-size:13px;color:#666;margin-top:2px}
+.qty-controls{display:flex;align-items:center;gap:8px}
+.qty-controls button{padding:6px 8px;border-radius:6px;border:0;cursor:pointer}
+
+/* Hóa đơn: hiển thị 6 dòng rồi cuộn */
+.cart-list{
+  list-style:none;
+  max-height:280px;   /* ~ 6 món */
+  overflow-y:auto;
+  margin-top:8px;
+  padding-left:0;
+}
+.cart-list li{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #eee;font-size:14px}
+
+/* Thanh cố định cuối màn hình: Tổng tiền + Nút */
+.cart-summary{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#fff;
+  border-top:1px solid #ddd;
+  padding:10px 12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:100;
+}
+
+.cart-total{
+  font-weight:700;
+  font-size:16px;
+}
+
+.cart-actions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+}
+
+/* Các nút & chung */
+.settings-line{width:100%;text-align:left;padding:12px;border-radius:8px}
+.btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+.btn-primary{background:#2b6ef6;color:#fff}
+.btn-secondary{background:#dfe7fb;color:#222}
+.btn-light{background:transparent;border:1px solid transparent;padding:6px 8px;border-radius:6px;cursor:pointer}
+.btn-action{background:#cfe0ff;color:#0b2b5a}
+.btn-action.primary{background:#2b6ef6;color:#fff}
+input,select{padding:8px;border:1px solid #ccc;border-radius:6px}
+.small{font-size:13px;color:#666}
+.history-day{background:#fff;border:1px solid #e6e9ef;padding:8px;border-radius:8px;margin-bottom:8px}
+.history-item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #eee}
+.history-total{font-weight:800;text-align:right;margin-top:6px}
+.payment-table{width:100%;border-collapse:collapse;margin-top:8px}
+.payment-table td, .payment-table th{padding:6px;border-bottom:1px dashed #eee;font-size:14px}
+
+/* ====== Bổ sung style cho modal chọn bàn ====== */
+.table-select-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  max-width: 500px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.table-select-list button {
+  min-width: 100px;
+  min-height: 60px;
+  font-size: 18px;
+  background: #f0f0f0; /* xám nhạt mặc định */
+  color: #222;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.table-select-list button.active {
+  background: #2b6ef6; /* xanh khi chọn */
+  color: #fff;
+  border-color: #2b6ef6;
+}
+
+.table-select-list button:hover {
+  background: #ddd; /* xám đậm khi hover */
+}
+
+
+/* nút đóng modal */
+.table-select-list .btn-danger {
+  background: #dc3545;
+  margin-top: 10px;
+}
+
+/* Nút khách */
+.guest-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.guest-buttons button {
+  flex: 1;               /* chia đều chiều ngang */
+  font-size: 16px;       /* chữ rõ hơn */
+  padding: 14px 0;       /* chiều cao vừa đẹp */
+  border-radius: 8px;
+}
+.cart-list li {
+  border-bottom: 1px dashed #bbb;  /* màu nhạt hơn (#bbb) */
+  border-image: repeating-linear-gradient(
+    to right,
+    #bbb 0,
+    #bbb 2px,     /* gạch ngắn hơn */
+    transparent 2px,
+    transparent 5px /* khoảng cách ngắn */
+  ) 1;
+  padding: 6px 0;
+}
+/* Custom Alert */
+.custom-alert {
+  display: none; /* ẩn mặc định */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+}
+
+.custom-alert-box {
+  background: #fff;
+  border: 2px solid #2b6ef6;
+  border-radius: 8px;
+  width: 300px;
+  margin: 15% auto;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.custom-alert-box p {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.custom-alert-box button {
+  background: #2b6ef6;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
