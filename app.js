@@ -436,10 +436,10 @@ function saveOrder() {
 
   // ✅ Đánh dấu món đã order và lưu lại số lượng gốc (baseQty)
   currentTable.cart = currentTable.cart.map(it => ({
-    ...it,
-    locked: true,
-    baseQty: (typeof it.baseQty === 'number') ? it.baseQty : it.qty
-  }));
+  ...it,
+  locked: true,
+  baseQty: (it.locked && typeof it.baseQty === 'number') ? it.baseQty : it.qty
+}));
 
   const idx = TABLES.findIndex(t => t.id === currentTable.id);
 
