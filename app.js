@@ -567,18 +567,6 @@ function confirmPayment(){
   $('payment-screen').style.display = 'none';
   backToTables();
 }
-
-  HISTORY.push(rec);
-  saveAll();
-
-  // tạm bỏ in
-  // printFinalBill(rec);
-
-  TABLES = TABLES.filter(t=> t.id !== currentTable.id);
-  saveAll();
-  $('payment-screen').style.display='none';
-  backToTables();
-}
 // print final bill
 function printFinalBill(rec){
   const paper = $('paper-size') ? $('paper-size').value : '58';
