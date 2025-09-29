@@ -237,7 +237,6 @@ function renderTables(){
 
 
 
-// helper tạo thẻ bàn (dùng trong renderTables)
 function makeTableCard(t){
   const card = document.createElement('div');
   card.className = 'table-card';
@@ -245,13 +244,7 @@ function makeTableCard(t){
   const info = document.createElement('div');
   info.className = 'table-info';
 
-  // ===== header trái-phải =====
-  const header = document.createElement('div');
-  header.style.display = 'flex';
-  header.style.justifyContent = 'space-between';
-  header.style.alignItems = 'center';
-
-  // tên bàn
+  // ===== dòng 1: tên bàn =====
   let displayName = t.name;
   if (t.name.startsWith('L'))       displayName = `Bàn trên lầu ${t.name}`;
   else if (t.name.startsWith('NT')) displayName = `Bàn ngoài trời ${t.name}`;
@@ -262,9 +255,9 @@ function makeTableCard(t){
   const name = document.createElement('div');
   name.className = 'table-name';
   name.innerText = displayName;
-  header.appendChild(name);
+  info.appendChild(name);
 
-  // số món + tổng tiền + giờ
+  // ===== dòng 2: số món + tổng tiền + giờ =====
   if (t.cart && t.cart.length){
     let qty = 0, total = 0;
     t.cart.forEach(it => { qty += it.qty; total += it.qty * it.price; });
@@ -272,7 +265,6 @@ function makeTableCard(t){
     const meta = document.createElement('div');
     meta.className = 'table-meta';
 
-    // Lấy giờ phút từ createdAt (nếu có)
     let timeStr = '';
     if (t.createdAt) {
       const d = new Date(t.createdAt);
@@ -282,10 +274,9 @@ function makeTableCard(t){
     }
 
     meta.innerText = qty + ' món • ' + fmtV(total) + ' VND' + timeStr;
-    header.appendChild(meta);
+    info.appendChild(meta);
   }
 
-  info.appendChild(header);
   card.appendChild(info);
 
   // click chọn bàn
