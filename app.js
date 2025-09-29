@@ -188,7 +188,7 @@ function renderTables(){
 
   // Nhóm L (4 cột)
   const groupL = activeTables.filter(t => t.name.startsWith('L'))
-    .sort((a,b)=>a.name.localeCompare(b.name));
+    .sort((a,b)=>(b.createdAt || 0) - (a.createdAt || 0));
   if (groupL.length) {
     const row = document.createElement('div');
     row.className = 'table-section table-section-4';
