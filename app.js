@@ -550,7 +550,7 @@ function renderHistory(){
   if(!HISTORY.length){ container.innerHTML = '<div class="small">Chưa có lịch sử</div>'; return; }
   const grouped = {};
   HISTORY.forEach(h=>{
-    const key = isoDateKey(h.time || h.iso || h.time);
+    const key = isoDateKey(h.iso);
     if(!grouped[key]) grouped[key]=[];
     grouped[key].push(h);
   });
