@@ -319,24 +319,13 @@
 <!-- Firebase SDK v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
 <script>
-  // Cấu hình từ Firebase console của bạn
-  const firebaseConfig = {
-    apiKey: "AIzaSyBJ-H3Q34YRJ0-RYkAvKDktvG8q9KRHUCE",
-    authDomain: "blacktea-1337.firebaseapp.com",
-    projectId: "blacktea-1337",
-    storageBucket: "blacktea-1337.firebasestorage.app",
-    messagingSenderId: "174305132603",
-    appId: "1:174305132603:web:ba066d1f0e6aa3696b9c1e",
-    measurementId: "G-LP4FFSZ0XR"
-  };
-
-  // 👉 Khởi tạo app
+  const firebaseConfig = { ... };
   firebase.initializeApp(firebaseConfig);
-
-  // 👉 Khởi tạo Firestore
   const db = firebase.firestore();
 </script>
+
+<!-- App code phải load sau khi db đã có -->
+<script src="app.js"></script>
 </body>
 </html>
