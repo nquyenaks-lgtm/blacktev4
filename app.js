@@ -390,7 +390,28 @@ function renderMenuList(){
 
 function getQty(id){ if(!currentTable) return 0; const it = currentTable.cart.find(c=>c.id===id); return it ? it.qty : 0; }
 
-function changeQty(id,delta){ if(!currentTable) return; const item = MENU.find(m=>m.id===id); if(!item) return; let it = currentTable.cart.find(c=>c.id===id); if(it){ it.qty += delta; if(it.qty<=0) currentTable.cart = currentTable.cart.filter(c=>c.id!==id); } else if(delta>0){ currentTable.cart.push({ id: item.id, name: item.name, price: item.price, qty: 1 }); } renderMenuList(); renderCart(); }
+function changeQty(id, delta){ 
+  if(!currentTable) return; 
+  const item = MENU.find(m=>m.id===id); 
+  if(!item) return; 
+  let it = currentTable.cart.find(c=>c.id===id); 
+
+  if(it){ 
+    // ✅ Nếu là món đã order (locked) thì KHÔNG cho giảm
+    if(it.locked && delta < 0) return;  
+
+    it.qty += delta; 
+    if(it.qty<=0) {
+      currentTable.cart = currentTable.cart.filter(c=>c.id!==id); 
+    }
+  } else if(delta>0){ 
+    // ✅ Món mới thì cho tự do tăng/giảm
+    currentTable.cart.push({ id: item.id, name: item.name, price: item.price, qty: 1, locked: false }); 
+  } 
+
+  renderMenuList(); 
+  renderCart(); 
+}
 
 // cart
 function renderCart(){ const ul = $('cart-list'); ul.innerHTML = ''; if(!currentTable || !currentTable.cart.length){ ul.innerHTML = '<div class="small">Chưa có món</div>'; $('total').innerText='0'; return; } let total=0; currentTable.cart.forEach(it=>{ total += it.price*it.qty; const li=document.createElement('li'); li.innerHTML = '<div><div style="font-weight:700">'+it.name+'</div><div class="small">'+fmtV(it.price)+' x '+it.qty+'</div></div><div style="font-weight:700">'+fmtV(it.price*it.qty)+'</div>'; ul.appendChild(li); }); $('total').innerText = fmtV(total); }
