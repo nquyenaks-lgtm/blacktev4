@@ -569,28 +569,41 @@ function confirmPayment(){
 }
 // print final bill
 function printFinalBill(rec){
-  const paper = $('paper-size') ? $('paper-size').value : '58';
-  const showName = $('print-name') ? $('print-name').checked : true;
-  const win = window.open('','_blank');
-  let html = '<html><head><meta charset="utf-8"><title>Hóa đơn</title></head><body>';
-  html += '<div style="font-family:monospace;width:300px;">';
-  if(showName) html += '<h2 style="text-align:center;margin:0">BlackTea</h2>';
-  html += '<div style="border-top:1px dashed #000;margin-top:6px"></div>';
-  html += '<div>Bàn: ' + rec.table + '</div>';
-  html += '<div>Thời gian: ' + rec.time + '</div>';
-  html += '<table style="width:100%;border-collapse:collapse;margin-top:6px">';
-  rec.items.forEach(i=>{
-    const name = i.name.length>20 ? i.name.substring(0,20)+'...' : i.name;
-    html += '<tr><td style="padding:6px">'+name+'</td><td style="padding:6px;text-align:right">'+i.qty+'</td><td style="padding:6px;text-align:right">'+fmtV(i.price*i.qty)+'</td></tr>';
+function printFinalBill(rec){
+  const win = window.open("", "In hoá đơn", "width=400,height=600");
+  if (!win) {
+    alert("Trình duyệt đang chặn cửa sổ in. Hãy bật cho phép popup.");
+    return;
+  }
+
+  let html = `
+    <html><head><title>Hoá đơn</title></head><body>
+    <h3 style="text-align:center">HOÁ ĐƠN</h3>
+    <p><b>Bàn/Khách:</b> ${rec.table}</p>
+    <p><b>Thời gian:</b> ${rec.time}</p>
+    <hr>
+  `;
+  rec.items.forEach(it=>{
+    html += `<div>${it.qty} x ${it.name} - ${formatCurrency(it.price * it.qty)}</div>`;
   });
-  html += '</table>';
-  html += '<div style="border-top:1px dashed #000;margin-top:6px"></div>';
-  html += '<div>Tạm tính: ' + fmtV(rec.subtotal) + ' VND</div>';
-  html += '<div>Chiết khấu: -' + fmtV(Math.round(rec.discount)) + ' VND</div>';
-  html += '<div style="text-align:right;font-weight:800;margin-top:6px">TỔNG: ' + fmtV(rec.total) + ' VND</div>';
-  html += '</div></body></html>';
-  win.document.write(html); win.document.close();
-  setTimeout(()=> win.print(), 500);
+  html += `
+    <hr>
+    <p><b>Tạm tính:</b> ${formatCurrency(rec.subtotal)}</p>
+    <p><b>Giảm giá:</b> ${rec.discount > 0 ? rec.discount : 0}</p>
+    <p><b>Tổng cộng:</b> ${formatCurrency(rec.total)}</p>
+    <hr>
+    <p style="text-align:center">Cám ơn quý khách!</p>
+    </body></html>
+  `;
+
+  win.document.write(html);
+  win.document.close();
+
+  // chờ 500ms để trình duyệt render rồi in
+  setTimeout(() => {
+    win.print();
+    win.close();
+  }, 500);
 }
 
 // Settings screens
