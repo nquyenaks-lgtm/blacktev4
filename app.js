@@ -569,7 +569,6 @@ function confirmPayment(){
 }
 // print final bill
 function printFinalBill(rec){
-function printFinalBill(rec){
   const win = window.open("", "In hoá đơn", "width=400,height=600");
   if (!win) {
     alert("Trình duyệt đang chặn cửa sổ in. Hãy bật cho phép popup.");
