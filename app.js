@@ -22,7 +22,7 @@ let MENU = JSON.parse(localStorage.getItem(KEY_MENU)) || [
   { id: 1, name: "Cà phê sữa nóng (Pha phin)", price: 15000, cat: "Cà phê" },
   { id: 2, name: "Cà phê sữa đá (Pha phin)", price: 15000, cat: "Cà phê" },
   { id: 3, name: "Cà phê đen nóng (Pha phin)", price: 15000, cat: "Cà phê" },
-  { id: 4, name: "Cà phê đen đá (Pha phin)", price: 15000, cat: "Cà phê" },
+  { id: 4, name: "Cà phê sữa đá (Pha phin)", price: 15000, cat: "Cà phê" },
   { id: 5, name: "Cà phê sữa nóng (Pha máy)", price: 15000, cat: "Cà phê" },
   { id: 6, name: "Cà phê sữa đá (Pha máy)", price: 15000, cat: "Cà phê" },
   { id: 7, name: "Cà phê đen nóng (Pha máy)", price: 15000, cat: "Cà phê" },
@@ -575,16 +575,10 @@ function renderHistory(){
           if(it._details) it.removeChild(it._details);
           it._expanded = false;
         } else {
-          // sau khi forEach xong, thêm nút in lại
-const reprintBtn = document.createElement('button');
-reprintBtn.className = 'btn btn-primary';
-reprintBtn.style.marginTop = '8px';
-reprintBtn.innerText = 'In lại hoá đơn';
-reprintBtn.onclick = (e)=>{
-  e.stopPropagation();   // tránh đóng/mở chi tiết
-  printFinalBill(rec);   // gọi lại hàm in cũ
-};
-details.appendChild(reprintBtn);
+          const details = document.createElement('div'); details.style.marginTop='6px';
+          rec.items.forEach(i=>{
+            const r = document.createElement('div'); r.className='small'; r.innerText = i.name + ' x' + i.qty + ' • ' + fmtV(i.price*i.qty) + ' VND';
+            details.appendChild(r);
           });
           it.appendChild(details);
           it._details = details;
