@@ -293,7 +293,7 @@ function addGuestVisit(){
   GUEST_CNT += 1;
   const name = 'Khách ghé quán ' + GUEST_CNT; // tên mới
   const id = Date.now();
-  TABLES.push({ id, name, cart: [] });
+  TABLES.push({ id, name, cart: [], createdAt: Date.now() });
   saveAll();
   createdFromMain = true;
   openTable(id);
@@ -304,7 +304,7 @@ function addNamed(){
   const name = $('new-table-name').value.trim();
   if(!name){ return; }
   const id = Date.now();
-  TABLES.push({ id, name, cart: [] });
+  TABLES.push({ id, name, cart: [], createdAt: Date.now() });
   $('new-table-name').value = '';
   saveAll();
   createdFromMain = true;
