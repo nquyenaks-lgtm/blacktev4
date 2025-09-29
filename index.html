@@ -316,6 +316,27 @@
     <button onclick="closeCustomAlert()">Xác nhận</button>
   </div>
 </div>
+<!-- Firebase v8 SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
+<script>
+  // Config copy từ Firebase console
+  const firebaseConfig = {
+    apiKey: "AIzaSyBJ-H3Q34YRJ0-RYkAvKDktvG8q9KRHUCE",
+    authDomain: "blacktea-1337.firebaseapp.com",
+    projectId: "blacktea-1337",
+    storageBucket: "blacktea-1337.firebasestorage.app",
+    messagingSenderId: "174305132603",
+    appId: "1:174305132603:web:ba066d1f0e6aa3696b9c1e",
+    measurementId: "G-LP4FFSZ0XR"
+  };
+
+  // Khởi tạo Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Kết nối Firestore
+  const db = firebase.firestore();
+</script>
 </body>
 </html>
