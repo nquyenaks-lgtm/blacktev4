@@ -266,6 +266,17 @@ function makeTableCard(t){
     meta.className = 'table-meta';
     meta.innerText = qty + ' món • ' + fmtV(total) + ' VND';
     info.appendChild(meta);
+    if (t.createdAt) {
+  const timeStr = new Date(t.createdAt).toLocaleTimeString('vi-VN', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  const timeDiv = document.createElement('div');
+  timeDiv.style.fontSize = '12px';
+  timeDiv.style.color = '#999';
+  timeDiv.innerText = '⏰ ' + timeStr;
+  info.appendChild(timeDiv);
+}
   }
 
   card.appendChild(info);
