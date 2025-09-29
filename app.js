@@ -537,40 +537,38 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 
 function confirmPayment(){
-  console.log(">>> confirmPayment chạy");
+function confirmPayment(){
+  if (!currentTable) return;
 
-  if (!currentTable) {
-    console.log("Không có currentTable");
-    return;
-  }
-
+  // Tính toán tổng tiền
   const { subtotal, discount, final } = updateFinalTotal();
   const d = new Date();  
 
+  // Tạo record bill
   const rec = { 
     table: currentTable.name, 
     time: nowStr(d),
-    iso: isoDateKey(d),
+    iso: isoDateKey(d),   // ví dụ: 2025-09-30
     items: currentTable.cart.slice(), 
     subtotal, 
     discount, 
     total: final 
   };
 
-  console.log(">>> chuẩn bị lưu Firestore:", rec);
-
-  // Thử gọi Firestore
+  // 👉 Lưu online vào Firestore
   db.collection("bills").add(rec)
-    .then(() => console.log("✅ Lưu Firestore thành công"))
+    .then(() => console.log("✅ Bill saved to Firestore"))
     .catch(err => console.error("❌ Firestore error:", err));
 
-  // Vẫn lưu local cho chắc
+  // 👉 Lưu localStorage (phòng khi mất mạng)
   HISTORY.push(rec);
   saveAll();
 
+  // 👉 Xoá bàn sau khi thanh toán
   TABLES = TABLES.filter(t => t.id !== currentTable.id);
   saveAll();
 
+  // 👉 Đóng màn hình thanh toán, quay lại danh sách bàn
   $('payment-screen').style.display = 'none';
   backToTables();
 }
