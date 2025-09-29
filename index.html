@@ -111,12 +111,15 @@
            style="width:80px; text-align:right;">
   </div>
   <input id="discount" type="number" value="0" style="width:150%;" placeholder="Nhập chiết khấu" />
+<!-- Ô nhập chiết khấu -->
+<input id="discount" type="number" value="0" style="width:150%;" placeholder="Nhập chiết khấu" />
 
 <small><i>
   Gõ từ 0–100 thì giảm theo % tổng đơn.<br>
   Từ 1000 trở lên thì giảm theo số tiền
 </i></small>
 
+<!-- Dòng hiển thị tổng -->
 <div style="margin-top:8px;font-weight:700">
   Tổng sau chiết khấu: <span id="pay-final-total">0</span> VND
 </div>
@@ -125,8 +128,8 @@
   const inputDiscount = document.querySelector("#discount");
   const finalTotalSpan = document.querySelector("#pay-final-total");
 
-  // 👉 App của bạn cần gán subtotal động theo đơn hàng hiện tại
-  let subtotal = 125000; // ví dụ thôi
+  // 👉 App của bạn truyền subtotal động vào đây
+  let subtotal = 60000; // ví dụ, sẽ lấy từ dữ liệu đơn hàng thực tế
 
   function updateTotal() {
     let val = parseInt(inputDiscount.value) || 0;
@@ -141,13 +144,21 @@
     let finalTotal = subtotal - discount;
     if (finalTotal < 0) finalTotal = 0;
 
+    // 👉 Làm tròn theo nghìn
+    let remainder = finalTotal % 1000;
+    if (remainder >= 500) {
+      finalTotal = finalTotal - remainder + 1000;
+    } else {
+      finalTotal = finalTotal - remainder;
+    }
+
     finalTotalSpan.textContent = finalTotal.toLocaleString("vi-VN");
   }
 
-  // Hiển thị số ban đầu = subtotal
+  // Hiển thị giá trị ban đầu
   updateTotal();
 
-  // Tự động cập nhật khi nhập chiết khấu
+  // Cập nhật khi gõ chiết khấu
   inputDiscount.addEventListener("input", updateTotal);
 </script>
       <div style="margin-top:12px;display:flex;gap:8px">
