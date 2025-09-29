@@ -99,73 +99,106 @@
     </main>
 
     <main id="payment-screen" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h2>Thanh toán - <span id="pay-table-name"></span></h2>
-        <button class="btn btn-light" onclick="closePayment()">← Quay lại</button>
-      </div>
-      <div id="pay-bill" style="margin-top:8px"></div>
-      <div style="margin-top:8px;">
-  <div style="display:flex; align-items:center; justify-content:space-between;">
-<div style="margin-top:8px;">
-  <label for="discount"><b>Chiết khấu:</b></label>
-  <input id="discount" type="number" value="0"
-         style="width:120px; text-align:right; margin-left:8px;" 
-         placeholder="Nhập chiết khấu" />
-
-  <div style="margin-top:4px;">
-    <small><i>
-      Gõ từ 0–100 thì giảm theo % tổng đơn.<br>
-      Từ 1000 trở lên thì giảm theo số tiền
-    </i></small>
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h2>Thanh toán - <span id="pay-table-name"></span></h2>
+    <button class="btn btn-light" onclick="closePayment()">← Quay lại</button>
   </div>
-</div>
 
-<div style="margin-top:8px;font-weight:700">
-  Tổng sau chiết khấu: <span id="pay-final-total">0</span> VND
-</div>
+  <div id="pay-bill" style="margin-top:8px"></div>
 
-<script>
-  const inputDiscount = document.querySelector("#discount");
-  const finalTotalSpan = document.querySelector("#pay-final-total");
+  <!-- Form chiết khấu + tổng -->
+  <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px; max-width:520px;">
+    <div style="display:flex; align-items:center; justify-content:flex-start; gap:12px;">
+      <label for="discount" style="font-weight:700; min-width:86px; margin-bottom:0;">Chiết khấu:</label>
+      <input id="discount" type="number" value="0"
+             style="width:140px; text-align:right; padding:8px; border-radius:8px; border:1px solid #ccc;"
+             placeholder="Nhập chiết khấu" />
+    </div>
 
-  // 👉 App của bạn truyền subtotal động vào đây
-  let subtotal = 60000; // ví dụ, sẽ lấy từ dữ liệu đơn hàng thực tế
+    <div>
+      <small><i>
+        Gõ từ 0–100 thì giảm theo % tổng đơn.<br>
+        Từ 1000 trở lên thì giảm theo số tiền
+      </i></small>
+    </div>
 
-  function updateTotal() {
-    let val = parseInt(inputDiscount.value) || 0;
-    let discount = 0;
+    <div style="margin-top:8px;font-weight:700">
+      Tổng sau chiết khấu: <span id="pay-final-total">0</span> VND
+    </div>
 
-    if (val >= 0 && val <= 100) {
-      discount = subtotal * val / 100;
-    } else if (val >= 1000) {
-      discount = val;
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn btn-secondary" onclick="closePayment()">Quay lại</button>
+      <button class="btn btn-primary" onclick="confirmPayment()">Xuất hóa đơn</button>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const inputDiscount = document.getElementById('discount');
+    const finalTotalSpan = document.getElementById('pay-final-total');
+
+    // Lấy subtotal từ #total (nếu app bạn render tạm tính ở #total)
+    function getSubtotal() {
+      const el = document.querySelector('#total');
+      if (el && el.textContent.trim()) {
+        // loại bỏ ký tự không phải số
+        const raw = el.textContent.replace(/[^\d]/g, '');
+        return parseInt(raw, 10) || 0;
+      }
+      // fallback: tìm số trong #pay-bill nếu có chữ "Tạm tính: ..." ở đó
+      const pb = document.getElementById('pay-bill');
+      if (pb) {
+        const m = pb.textContent.match(/(\d[\d.,\s]*)/);
+        if (m) {
+          const raw = m[1].replace(/[.,\s]/g,'');
+          return parseInt(raw, 10) || 0;
+        }
+      }
+      return 0;
     }
 
-    let finalTotal = subtotal - discount;
-    if (finalTotal < 0) finalTotal = 0;
-
-    // 👉 Làm tròn theo nghìn
-    let remainder = finalTotal % 1000;
-    if (remainder >= 500) {
-      finalTotal = finalTotal - remainder + 1000;
-    } else {
-      finalTotal = finalTotal - remainder;
+    function roundToThousands(n) {
+      const r = n % 1000;
+      return r >= 500 ? (n - r + 1000) : (n - r);
     }
 
-    finalTotalSpan.textContent = finalTotal.toLocaleString("vi-VN");
-  }
+    function updateTotal() {
+      const subtotal = getSubtotal();
+      let val = parseInt(inputDiscount.value, 10);
+      if (!Number.isFinite(val)) val = 0;
 
-  // Hiển thị giá trị ban đầu
-  updateTotal();
+      let discount = 0;
+      if (val >= 0 && val <= 100) {
+        discount = Math.round(subtotal * val / 100);
+      } else if (val >= 1000) {
+        discount = val;
+      }
 
-  // Cập nhật khi gõ chiết khấu
-  inputDiscount.addEventListener("input", updateTotal);
-</script>
-      <div style="margin-top:12px;display:flex;gap:8px">
-        <button class="btn btn-secondary" onclick="closePayment()">Quay lại</button>
-        <button class="btn btn-primary" onclick="confirmPayment()">Xuất hóa đơn</button>
-      </div>
-    </main>
+      let finalTotal = subtotal - discount;
+      if (finalTotal < 0) finalTotal = 0;
+
+      finalTotal = roundToThousands(finalTotal);
+
+      finalTotalSpan.textContent = finalTotal.toLocaleString('vi-VN');
+    }
+
+    // Cập nhật khi nhập chiết khấu
+    inputDiscount.addEventListener('input', updateTotal);
+
+    // Nếu subtotal (#total) thay đổi do app, chúng ta quan sát và cập nhật lại
+    const watchTarget = document.querySelector('#total') || document.getElementById('pay-bill');
+    if (watchTarget) {
+      const mo = new MutationObserver(() => {
+        updateTotal();
+      });
+      mo.observe(watchTarget, { childList: true, characterData: true, subtree: true });
+    }
+
+    // Hiển thị ban đầu
+    updateTotal();
+  })();
+  </script>
+</main>
 
     <main id="settings-screen" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center">
