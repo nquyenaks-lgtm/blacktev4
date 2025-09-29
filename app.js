@@ -198,7 +198,7 @@ function renderTables(){
 
   // Nhóm NT (2 cột)
   const groupNT = activeTables.filter(t => t.name.startsWith('NT'))
-    .sort((a,b)=>a.name.localeCompare(b.name));
+    .sort((a,b)=>(b.createdAt || 0) - (a.createdAt || 0));
   if (groupNT.length) {
     const row = document.createElement('div');
     row.className = 'table-section table-section-2';
@@ -210,7 +210,7 @@ function renderTables(){
   ['T','G','N'].forEach(prefix=>{
     const g = activeTables.filter(t =>
       t.name.startsWith(prefix) && !(prefix==='N' && t.name.startsWith('NT'))
-    ).sort((a,b)=>a.name.localeCompare(b.name));
+    ).sort((a,b)=>(b.createdAt || 0) - (a.createdAt || 0));
     g.forEach(t=>{
       const row = document.createElement('div');
       row.className = 'table-section table-section-1';
@@ -226,7 +226,7 @@ function renderTables(){
     !t.name.startsWith('T') &&
     !t.name.startsWith('G') &&
     !t.name.startsWith('N')
-  ).sort((a,b)=>a.name.localeCompare(b.name));
+  ).sort((a,b)=>(b.createdAt || 0) - (a.createdAt || 0));
   if (others.length) {
     const row = document.createElement('div');
     row.className = 'table-section table-section-others';
