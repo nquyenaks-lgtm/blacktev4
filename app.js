@@ -545,19 +545,16 @@ function confirmPayment(){
   const rec = { 
     table: currentTable.name, 
     time: nowStr(d),
-    iso: isoDateKey(d),     // ví dụ: 2025-09-30
+    iso: isoDateKey(d),     // ví dụ 2025-09-30
     items: currentTable.cart.slice(), 
     subtotal, 
     discount, 
     total: final 
   };
 
-  // lưu vào lịch sử
+  // chỉ lưu vào lịch sử
   HISTORY.push(rec);
   saveAll();
-
-  // in bill
-  printFinalBill(rec);
 
   // xoá bàn hiện tại
   TABLES = TABLES.filter(t => t.id !== currentTable.id);
