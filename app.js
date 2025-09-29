@@ -35,7 +35,7 @@ let MENU = JSON.parse(localStorage.getItem(KEY_MENU)) || [
   { id: 14, name: "Cacao đá", price: 20000, cat: "Cà phê" },
 
   // --- Trà sữa (M/L) ---
-  { id: 15, name: "Trà sữa truyền thống (Size L)", price: 25000, cat: "Trà sữa" },
+  { id: 15, name: "Trà sữa truyền thống (Size L)", price: 20000, cat: "Trà sữa" },
   { id: 16, name: "Trà sữa khoai môn (Size M)", price: 20000, cat: "Trà sữa" },
   { id: 17, name: "Trà sữa khoai môn (Size L)", price: 25000, cat: "Trà sữa" },
   { id: 18, name: "Trà sữa socola (Size M)", price: 20000, cat: "Trà sữa" },
