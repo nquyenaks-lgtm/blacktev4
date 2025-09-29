@@ -575,23 +575,6 @@ function confirmPayment(){
   backToTables();
 }
 
-  // 👉 Lưu online vào Firestore
-  db.collection("bills").add(rec)
-    .then(() => console.log("✅ Bill saved to Firestore"))
-    .catch(err => console.error("❌ Error saving bill:", err));
-
-  // Nếu vẫn muốn lưu local thì giữ lại
-  HISTORY.push(rec);
-  saveAll();
-
-  // Xoá bàn hiện tại
-  TABLES = TABLES.filter(t => t.id !== currentTable.id);
-  saveAll();
-
-  // Quay lại danh sách bàn
-  $('payment-screen').style.display = 'none';
-  backToTables();
-}
 // print final bill
 function printFinalBill(rec){
   const win = window.open("", "In hoá đơn", "width=400,height=600");
