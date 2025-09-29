@@ -537,23 +537,36 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 
 function confirmPayment(){
-  alert("Tên bàn: " + currentTable.name);  // test popup
-  if(!currentTable) {
-    alert("Không có currentTable");
-    return;
-  }
+  if (!currentTable) return;
 
   const { subtotal, discount, final } = updateFinalTotal();
   const d = new Date();  
+
   const rec = { 
     table: currentTable.name, 
     time: nowStr(d),
-    iso: isoDateKey(d),
+    iso: isoDateKey(d),     // ví dụ: 2025-09-30
     items: currentTable.cart.slice(), 
     subtotal, 
     discount, 
     total: final 
   };
+
+  // lưu vào lịch sử
+  HISTORY.push(rec);
+  saveAll();
+
+  // in bill
+  printFinalBill(rec);
+
+  // xoá bàn hiện tại
+  TABLES = TABLES.filter(t => t.id !== currentTable.id);
+  saveAll();
+
+  // đóng màn hình thanh toán, quay lại danh sách bàn
+  $('payment-screen').style.display = 'none';
+  backToTables();
+}
 
   HISTORY.push(rec);
   saveAll();
