@@ -134,7 +134,13 @@ function $(id){ return document.getElementById(id); }
 function fmtV(n){ return n.toLocaleString('vi-VN'); }
 function nowStr(){ return new Date().toLocaleString('vi-VN'); }
 function isoDateKey(t){ const d = new Date(t); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
-function displayDateFromISO(iso){ const parts = iso.split('-'); return parts[2] + '/' + parts[1] + '/' + parts[0]; }
+function displayDateFromISO(iso){ 
+  const parts = iso.split('-'); 
+  const day = parts[2].padStart(2, '0');
+  const month = parts[1].padStart(2, '0');
+  const year = parts[0];
+  return `${day}/${month}/${year}`;
+}
 function saveAll(){ localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); localStorage.setItem(KEY_GUEST, String(GUEST_CNT)); }
 
 // render tables (sắp xếp: L = 4 cột, NT = 2 cột, T/G/N = mỗi bàn 1 hàng dọc, khác = Bàn tạm)
