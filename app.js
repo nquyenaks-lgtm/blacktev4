@@ -264,13 +264,24 @@ function makeTableCard(t){
   name.innerText = displayName;
   header.appendChild(name);
 
-  // số món + tổng tiền
-  if (t.cart && t.cart.length) {
+  // số món + tổng tiền + giờ
+  if (t.cart && t.cart.length){
     let qty = 0, total = 0;
     t.cart.forEach(it => { qty += it.qty; total += it.qty * it.price; });
+
     const meta = document.createElement('div');
     meta.className = 'table-meta';
-    meta.innerText = qty + ' món • ' + fmtV(total) + ' VND';
+
+    // Lấy giờ phút từ createdAt (nếu có)
+    let timeStr = '';
+    if (t.createdAt) {
+      const d = new Date(t.createdAt);
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      timeStr = ` • ⏰ ${hh}:${mm}`;
+    }
+
+    meta.innerText = qty + ' món • ' + fmtV(total) + ' VND' + timeStr;
     header.appendChild(meta);
   }
 
