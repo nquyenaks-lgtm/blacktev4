@@ -133,8 +133,7 @@ function closeCustomAlert() {
 function $(id){ return document.getElementById(id); }
 function fmtV(n){ return n.toLocaleString('vi-VN'); }
 // thời gian đầy đủ 2 số
-function nowStr(){ 
-  const d = new Date();
+function nowStr(d = new Date()){ 
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const year = d.getFullYear();
@@ -144,9 +143,8 @@ function nowStr(){
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 }
 
-// key lưu dạng yyyy-mm-dd (có zero padding)
-function isoDateKey(t){ 
-  const d = new Date(t); 
+function isoDateKey(d){ 
+  if (!(d instanceof Date)) d = new Date(d);
   const y = d.getFullYear(); 
   const m = String(d.getMonth()+1).padStart(2,'0'); 
   const day = String(d.getDate()).padStart(2,'0'); 
