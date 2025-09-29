@@ -537,7 +537,7 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 
 function confirmPayment(){
-  alert("Hàm confirmPayment đã chạy!");  // test popup
+  alert("Tên bàn: " + currentTable.name);  // test popup
   if(!currentTable) {
     alert("Không có currentTable");
     return;
