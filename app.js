@@ -538,9 +538,12 @@ function updateFinalTotal(){
 
 // close payment (back to table screen)
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
-
+// inbill
 function confirmPayment(){
-  if (!currentTable) return;
+  if (!currentTable) {
+    alert("❌ Không có bàn nào đang chọn");
+    return;
+  }
 
   // Tính toán tổng tiền
   const { subtotal, discount, final } = updateFinalTotal();
@@ -550,7 +553,7 @@ function confirmPayment(){
   const rec = { 
     table: currentTable.name, 
     time: nowStr(d),
-    iso: isoDateKey(d),   // ví dụ: 2025-09-30
+    iso: isoDateKey(d),
     items: currentTable.cart.slice(), 
     subtotal, 
     discount, 
@@ -559,14 +562,18 @@ function confirmPayment(){
 
   // 👉 Lưu online vào Firestore
   db.collection("bills").add(rec)
-    .then(() => console.log("✅ Bill saved to Firestore"))
-    .catch(err => console.error("❌ Firestore error:", err));
+    .then(() => {
+      alert("✅ Bill đã lưu lên Firestore!");
+    })
+    .catch(err => {
+      alert("❌ Firestore error: " + err.message);
+    });
 
-  // 👉 Lưu localStorage (phòng khi mất mạng)
+  // 👉 Lưu local (phòng khi mất mạng)
   HISTORY.push(rec);
   saveAll();
 
-  // 👉 Xoá bàn sau khi thanh toán
+  // 👉 Xoá bàn hiện tại
   TABLES = TABLES.filter(t => t.id !== currentTable.id);
   saveAll();
 
