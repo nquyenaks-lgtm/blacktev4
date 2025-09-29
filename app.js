@@ -132,6 +132,7 @@ function closeCustomAlert() {
 }
 function $(id){ return document.getElementById(id); }
 function fmtV(n){ return n.toLocaleString('vi-VN'); }
+// thời gian đầy đủ 2 số
 function nowStr(){ 
   const d = new Date();
   const day = String(d.getDate()).padStart(2, '0');
@@ -142,11 +143,21 @@ function nowStr(){
   const seconds = String(d.getSeconds()).padStart(2, '0');
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 }
-function isoDateKey(t){ const d = new Date(t); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
+
+// key lưu dạng yyyy-mm-dd (có zero padding)
+function isoDateKey(t){ 
+  const d = new Date(t); 
+  const y = d.getFullYear(); 
+  const m = String(d.getMonth()+1).padStart(2,'0'); 
+  const day = String(d.getDate()).padStart(2,'0'); 
+  return `${y}-${m}-${day}`;
+}
+
+// hiển thị dạng dd/mm/yyyy (có zero padding)
 function displayDateFromISO(iso){ 
   const parts = iso.split('-'); 
-  const day = parts[2].padStart(2, '0');
-  const month = parts[1].padStart(2, '0');
+  const day = parts[2].padStart(2,'0');
+  const month = parts[1].padStart(2,'0');
   const year = parts[0];
   return `${day}/${month}/${year}`;
 }
