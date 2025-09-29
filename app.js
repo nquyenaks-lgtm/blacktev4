@@ -536,15 +536,14 @@ function updateFinalTotal(){
 // close payment (back to table screen)
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 
-// confirm payment: save to history, print, remove table
 function confirmPayment(){
   if(!currentTable) return;
   const { subtotal, discount, final } = updateFinalTotal();
-  const d = new Date();  // tạo 1 đối tượng Date gốc
+  const d = new Date();  
   const rec = { 
     table: currentTable.name, 
-    time: nowStr(d),             // truyền Date vào nowStr
-    iso: isoDateKey(d),          // truyền Date vào isoDateKey
+    time: nowStr(d),
+    iso: isoDateKey(d),
     items: currentTable.cart.slice(), 
     subtotal, 
     discount, 
@@ -552,7 +551,7 @@ function confirmPayment(){
   };
   HISTORY.push(rec);
   saveAll();
-  printFinalBill(rec);
+  // printFinalBill(rec);   // tạm thời bỏ in
   TABLES = TABLES.filter(t=> t.id !== currentTable.id);
   saveAll();
   $('payment-screen').style.display='none';
