@@ -537,7 +537,12 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 
 function confirmPayment(){
-  if(!currentTable) return;
+  alert("Hàm confirmPayment đã chạy!");  // test popup
+  if(!currentTable) {
+    alert("Không có currentTable");
+    return;
+  }
+
   const { subtotal, discount, final } = updateFinalTotal();
   const d = new Date();  
   const rec = { 
@@ -549,15 +554,18 @@ function confirmPayment(){
     discount, 
     total: final 
   };
+
   HISTORY.push(rec);
   saveAll();
-  // printFinalBill(rec);   // tạm thời bỏ in
+
+  // tạm bỏ in
+  // printFinalBill(rec);
+
   TABLES = TABLES.filter(t=> t.id !== currentTable.id);
   saveAll();
   $('payment-screen').style.display='none';
   backToTables();
 }
-
 // print final bill
 function printFinalBill(rec){
   const paper = $('paper-size') ? $('paper-size').value : '58';
