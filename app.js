@@ -283,7 +283,7 @@ function addGuest(){
   GUEST_CNT += 1;
   const name = 'Khách mang đi ' + GUEST_CNT;
   const id = Date.now();
-  TABLES.push({ id, name, cart: [] });
+  TABLES.push({ id, name, cart: [], createdAt: Date.now() });
   saveAll();
   createdFromMain = true;
   openTable(id);
