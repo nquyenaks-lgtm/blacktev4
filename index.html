@@ -106,15 +106,19 @@
       <div id="pay-bill" style="margin-top:8px"></div>
       <div style="margin-top:8px;">
   <div style="display:flex; align-items:center; justify-content:space-between;">
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px;">
+<div style="margin-top:8px;">
   <label for="discount"><b>Chiết khấu:</b></label>
-  <input id="discount" type="number" value="0" style="width:150%; text-align:right;" placeholder="Nhập chiết khấu" />
-</div>
+  <input id="discount" type="number" value="0"
+         style="width:120px; text-align:right; margin-left:8px;" 
+         placeholder="Nhập chiết khấu" />
 
-<small><i>
-  Gõ từ 0–100 thì giảm theo % tổng đơn.<br>
-  Từ 1000 trở lên thì giảm theo số tiền
-</i></small>
+  <div style="margin-top:4px;">
+    <small><i>
+      Gõ từ 0–100 thì giảm theo % tổng đơn.<br>
+      Từ 1000 trở lên thì giảm theo số tiền
+    </i></small>
+  </div>
+</div>
 
 <div style="margin-top:8px;font-weight:700">
   Tổng sau chiết khấu: <span id="pay-final-total">0</span> VND
