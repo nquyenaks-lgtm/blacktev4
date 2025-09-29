@@ -483,7 +483,16 @@ function closePayment(){ $('payment-screen').style.display='none'; $('menu-scree
 function confirmPayment(){
   if(!currentTable) return;
   const { subtotal, discount, final } = updateFinalTotal();
-  const rec = { table: currentTable.name, time: nowStr(), iso: isoDateKey(nowStr()), items: currentTable.cart.slice(), subtotal, discount, total: final };
+  const d = new Date();  // tạo 1 đối tượng Date gốc
+  const rec = { 
+    table: currentTable.name, 
+    time: nowStr(d),             // truyền Date vào nowStr
+    iso: isoDateKey(d),          // truyền Date vào isoDateKey
+    items: currentTable.cart.slice(), 
+    subtotal, 
+    discount, 
+    total: final 
+  };
   HISTORY.push(rec);
   saveAll();
   printFinalBill(rec);
