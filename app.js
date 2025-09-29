@@ -434,10 +434,13 @@ function saveOrder() {
   if (!currentTable) return;
   if (!currentTable.cart.length) return;
 
-  // ✅ Đánh dấu tất cả món hiện tại là đã order (locked)
-  currentTable.cart = currentTable.cart.map(it => ({ ...it, locked: true }));
+  // ✅ Đánh dấu món đã order và lưu lại số lượng gốc (baseQty)
+  currentTable.cart = currentTable.cart.map(it => ({
+    ...it,
+    locked: true,
+    baseQty: (typeof it.baseQty === 'number') ? it.baseQty : it.qty
+  }));
 
-  // Giữ nguyên logic cũ: cập nhật bàn nếu có, thêm mới nếu chưa
   const idx = TABLES.findIndex(t => t.id === currentTable.id);
 
   if (idx >= 0) {
@@ -446,7 +449,6 @@ function saveOrder() {
     TABLES.push({ ...currentTable });
   }
 
-  // Lưu và cập nhật giao diện
   saveAll();
   renderTables();
   backToTables();
