@@ -537,7 +537,6 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 
 function confirmPayment(){
-function confirmPayment(){
   if (!currentTable) return;
 
   // Tính toán tổng tiền
