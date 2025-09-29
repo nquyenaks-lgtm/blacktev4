@@ -6,6 +6,8 @@ const KEY_CATS = 'BT8_CATS';
 const KEY_TABLES = 'BT8_TABLES';
 const KEY_HISTORY = 'BT8_HISTORY';
 const KEY_GUEST = 'BT8_GUEST_CNT';
+localStorage.removeItem(KEY_MENU);
+localStorage.removeItem(KEY_CATS);
 const FIXED_TABLES = [
   "L1","L2","L3","L4",
   "NT1","NT2",
