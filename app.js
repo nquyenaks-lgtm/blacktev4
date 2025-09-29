@@ -674,7 +674,15 @@ function renderHistory(){
     container.appendChild(dayDiv);
   });
 }
-
+function loadHistoryOnline(){
+  db.collection("bills").orderBy("time", "desc").get().then(snapshot => {
+    HISTORY = [];
+    snapshot.forEach(doc => {
+      HISTORY.push(doc.data());
+    });
+    renderHistory();  // gọi hàm vẽ lại UI lịch sử
+  });
+}
 // hiện danh sách bàn để chọn (có overlay mờ nền)
 function openTableModal() {
   // ===== Overlay mờ nền =====
