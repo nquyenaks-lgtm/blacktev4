@@ -1,4 +1,5 @@
 // BlackTea POS v8 final - full logic with payment preview, discount, history filter and expandable history items
+alert(">>> app.js loaded thành công");
 let selectedTable = null;
 let isAddingMore = false;
 function formatCurrency(n){
