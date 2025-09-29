@@ -104,9 +104,17 @@
         <button class="btn btn-light" onclick="closePayment()">← Quay lại</button>
       </div>
       <div id="pay-bill" style="margin-top:8px"></div>
-      <div style="margin-top:8px">
-        <label>Chiết khấu: <input id="discount-input" placeholder="0 hoặc 5%" oninput="updateFinalTotal()" /></label>
-      </div>
+      <div style="margin-top:8px;">
+  <div style="display:flex; align-items:center; justify-content:space-between;">
+    <label for="discount"><b>Chiết khấu:</b></label>
+    <input id="discount" type="number" value="0" 
+           style="width:80px; text-align:right;">
+  </div>
+  <div style="font-size:12px; font-style:italic; color:#666; margin-top:2px;">
+    Gõ từ 0–100 thì giảm theo % tổng đơn.  
+    Từ 1000 trở lên thì giảm theo số tiền
+  </div>
+</div>
       <div style="margin-top:8px;font-weight:700">Tổng sau chiết khấu: <span id="pay-final-total">0</span> VND</div>
       <div style="margin-top:12px;display:flex;gap:8px">
         <button class="btn btn-secondary" onclick="closePayment()">Quay lại</button>
