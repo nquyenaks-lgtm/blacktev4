@@ -397,16 +397,27 @@ function changeQty(id, delta){
   let it = currentTable.cart.find(c=>c.id===id); 
 
   if(it){ 
-    // ✅ Nếu là món đã order (locked) thì KHÔNG cho giảm
-    if(it.locked && delta < 0) return;  
+    if(it.locked){ 
+      // ✅ Nếu là món đã order, không cho giảm thấp hơn baseQty
+      if(delta < 0 && it.qty <= it.baseQty) return;  
+    }
 
     it.qty += delta; 
-    if(it.qty<=0) {
+
+    // ✅ Chỉ xoá nếu là món mới và qty <= 0
+    if(!it.locked && it.qty <= 0) {
       currentTable.cart = currentTable.cart.filter(c=>c.id!==id); 
     }
-  } else if(delta>0){ 
-    // ✅ Món mới thì cho tự do tăng/giảm
-    currentTable.cart.push({ id: item.id, name: item.name, price: item.price, qty: 1, locked: false }); 
+  } else if(delta > 0){ 
+    // ✅ Món mới thêm
+    currentTable.cart.push({ 
+      id: item.id, 
+      name: item.name, 
+      price: item.price, 
+      qty: 1, 
+      locked: false,
+      baseQty: 0 
+    }); 
   } 
 
   renderMenuList(); 
