@@ -114,6 +114,18 @@ let MENU = JSON.parse(localStorage.getItem(KEY_MENU)) || [
 
 let CATEGORIES = JSON.parse(localStorage.getItem(KEY_CATS)) || ["Cà phê","Trà sữa","Sinh tố","Sữa chua","Giải khát","Trà & Nước ép","Matcha","Ăn vặt","Topping"];
 let TABLES = JSON.parse(localStorage.getItem(KEY_TABLES)) || [];
+
+// ✅ Migration: đảm bảo mỗi item trong cart có locked và baseQty
+TABLES = TABLES.map(t => ({
+  ...t,
+  cart: (t.cart || []).map(it => ({
+    ...it,
+    locked: !!it.locked, 
+    baseQty: (typeof it.baseQty === 'number') 
+               ? it.baseQty 
+               : (it.locked ? it.qty : 0)
+  }))
+}));
 let HISTORY = JSON.parse(localStorage.getItem(KEY_HISTORY)) || [];
 let GUEST_CNT = parseInt(localStorage.getItem(KEY_GUEST) || '0');
 
