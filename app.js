@@ -245,42 +245,39 @@ function makeTableCard(t){
   const info = document.createElement('div');
   info.className = 'table-info';
 
-  const name = document.createElement('div');
-  name.className = 'table-name';
+  // ===== header trái-phải =====
+  const header = document.createElement('div');
+  header.style.display = 'flex';
+  header.style.justifyContent = 'space-between';
+  header.style.alignItems = 'center';
 
-  // Hiển thị tên dài hơn trong danh sách “Bàn đang phục vụ”
+  // tên bàn
   let displayName = t.name;
-  if (t.name.startsWith('L'))      displayName = `Bàn trên lầu ${t.name}`;
+  if (t.name.startsWith('L'))       displayName = `Bàn trên lầu ${t.name}`;
   else if (t.name.startsWith('NT')) displayName = `Bàn ngoài trời ${t.name}`;
   else if (t.name.startsWith('T'))  displayName = `Bàn tường ${t.name}`;
   else if (t.name.startsWith('G'))  displayName = `Bàn giữa ${t.name}`;
   else if (t.name.startsWith('N'))  displayName = `Bàn nệm ${t.name}`;
 
+  const name = document.createElement('div');
+  name.className = 'table-name';
   name.innerText = displayName;
-  info.appendChild(name);
+  header.appendChild(name);
 
-  if(t.cart && t.cart.length){
+  // số món + tổng tiền
+  if (t.cart && t.cart.length) {
     let qty = 0, total = 0;
     t.cart.forEach(it => { qty += it.qty; total += it.qty * it.price; });
     const meta = document.createElement('div');
     meta.className = 'table-meta';
     meta.innerText = qty + ' món • ' + fmtV(total) + ' VND';
-    info.appendChild(meta);
-    if (t.createdAt) {
-  const timeStr = new Date(t.createdAt).toLocaleTimeString('vi-VN', {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-  const timeDiv = document.createElement('div');
-  timeDiv.style.fontSize = '12px';
-  timeDiv.style.color = '#999';
-  timeDiv.innerText = '⏰ ' + timeStr;
-  info.appendChild(timeDiv);
-}
+    header.appendChild(meta);
   }
 
+  info.appendChild(header);
   card.appendChild(info);
 
+  // click chọn bàn
   card.onclick = () => {
     document.querySelectorAll('.table-card').forEach(c => c.classList.remove('active'));
     card.classList.add('active');
