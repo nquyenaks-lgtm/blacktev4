@@ -537,26 +537,35 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 
 function confirmPayment(){
-  console.log(">>> confirmPayment chạy");
+  if (!currentTable) return;
+
+  const { subtotal, discount, final } = updateFinalTotal();
+  const d = new Date();  
 
   const rec = { 
-    table: currentTable ? currentTable.name : "???",
-    time: new Date().toLocaleString(),
-    iso: new Date().toISOString().split("T")[0],
-    items: currentTable ? currentTable.cart.slice() : [],
-    subtotal: 0,
-    discount: 0,
-    total: 0
+    table: currentTable.name, 
+    time: nowStr(d),
+    iso: isoDateKey(d),   // ví dụ: 2025-09-30
+    items: currentTable.cart.slice(), 
+    subtotal, 
+    discount, 
+    total: final 
   };
 
+  // 👉 Lưu online vào Firestore
+  db.collection("bills").add(rec)
+    .then(() => console.log("✅ Bill saved to Firestore"))
+    .catch(err => console.error("❌ Error saving bill:", err));
+
+  // Nếu vẫn muốn lưu local thì giữ lại
   HISTORY.push(rec);
   saveAll();
 
-  console.log(">>> Bill đã lưu:", rec);
-
+  // Xoá bàn hiện tại
   TABLES = TABLES.filter(t => t.id !== currentTable.id);
   saveAll();
 
+  // Quay lại danh sách bàn
   $('payment-screen').style.display = 'none';
   backToTables();
 }
