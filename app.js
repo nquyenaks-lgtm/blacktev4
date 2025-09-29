@@ -818,7 +818,7 @@ function openTableModal() {
     }
 
     const id = Date.now();
-    TABLES.push({ id, name, cart: [] });
+    TABLES.push({ id, name, cart: [], createdAt: new Date().toISOString() });
     saveAll();
     closeModal();
     createdFromMain = true;
