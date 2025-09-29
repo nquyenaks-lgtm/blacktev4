@@ -402,16 +402,19 @@ function saveOrder() {
   if (!currentTable) return;
   if (!currentTable.cart.length) return;
 
+  // ✅ Đánh dấu tất cả món hiện tại là đã order (locked)
+  currentTable.cart = currentTable.cart.map(it => ({ ...it, locked: true }));
+
+  // Giữ nguyên logic cũ: cập nhật bàn nếu có, thêm mới nếu chưa
   const idx = TABLES.findIndex(t => t.id === currentTable.id);
 
   if (idx >= 0) {
-    // Nếu bàn đã tồn tại → cập nhật lại
     TABLES[idx] = { ...currentTable };
   } else {
-    // Nếu bàn chưa tồn tại (VD: Khách mang đi) → thêm mới
     TABLES.push({ ...currentTable });
   }
 
+  // Lưu và cập nhật giao diện
   saveAll();
   renderTables();
   backToTables();
