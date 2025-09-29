@@ -575,10 +575,16 @@ function renderHistory(){
           if(it._details) it.removeChild(it._details);
           it._expanded = false;
         } else {
-          const details = document.createElement('div'); details.style.marginTop='6px';
-          rec.items.forEach(i=>{
-            const r = document.createElement('div'); r.className='small'; r.innerText = i.name + ' x' + i.qty + ' • ' + fmtV(i.price*i.qty) + ' VND';
-            details.appendChild(r);
+          // sau khi forEach xong, thêm nút in lại
+const reprintBtn = document.createElement('button');
+reprintBtn.className = 'btn btn-primary';
+reprintBtn.style.marginTop = '8px';
+reprintBtn.innerText = 'In lại hoá đơn';
+reprintBtn.onclick = (e)=>{
+  e.stopPropagation();   // tránh đóng/mở chi tiết
+  printFinalBill(rec);   // gọi lại hàm in cũ
+};
+details.appendChild(reprintBtn);
           });
           it.appendChild(details);
           it._details = details;
