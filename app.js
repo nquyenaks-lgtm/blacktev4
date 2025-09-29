@@ -537,7 +537,12 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 
 function confirmPayment(){
-  if (!currentTable) return;
+  console.log(">>> confirmPayment chạy");
+
+  if (!currentTable) {
+    console.log("Không có currentTable");
+    return;
+  }
 
   const { subtotal, discount, final } = updateFinalTotal();
   const d = new Date();  
@@ -545,12 +550,30 @@ function confirmPayment(){
   const rec = { 
     table: currentTable.name, 
     time: nowStr(d),
-    iso: isoDateKey(d),   // ví dụ: 2025-09-30
+    iso: isoDateKey(d),
     items: currentTable.cart.slice(), 
     subtotal, 
     discount, 
     total: final 
   };
+
+  console.log(">>> chuẩn bị lưu Firestore:", rec);
+
+  // Thử gọi Firestore
+  db.collection("bills").add(rec)
+    .then(() => console.log("✅ Lưu Firestore thành công"))
+    .catch(err => console.error("❌ Firestore error:", err));
+
+  // Vẫn lưu local cho chắc
+  HISTORY.push(rec);
+  saveAll();
+
+  TABLES = TABLES.filter(t => t.id !== currentTable.id);
+  saveAll();
+
+  $('payment-screen').style.display = 'none';
+  backToTables();
+}
 
   // 👉 Lưu online vào Firestore
   db.collection("bills").add(rec)
