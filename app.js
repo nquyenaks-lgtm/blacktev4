@@ -119,7 +119,7 @@ let GUEST_CNT = parseInt(localStorage.getItem(KEY_GUEST) || '0');
 
 let currentTable = null;
 let createdFromMain = false;
-let activeCategory = 'Tất cả';
+let activeCategory = 'Cà phê';
 
 // helpers
 function showCustomAlert(msg) {
