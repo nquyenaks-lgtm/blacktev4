@@ -316,8 +316,14 @@
 </div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy } 
-    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    getDocs, 
+    query, 
+    orderBy 
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBJ-H3Q34YRJ0-RYkAvKDktvG8q9KRHUCE",
@@ -329,8 +335,9 @@
     measurementId: "G-LP4FFSZ0XR"
   };
 
+  // Khởi tạo app và Firestore
   const app = initializeApp(firebaseConfig);
-  window.db = getFirestore(app); // ✅ để app.js dùng được
+  window.db = getFirestore(app); // cho app.js dùng
 </script>
 </body>
 </html>>
