@@ -314,10 +314,11 @@
     <button onclick="closeCustomAlert()">Xác nhận</button>
   </div>
 </div>
-<!-- Firebase SDK v8 -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, query, orderBy } 
+    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyBJ-H3Q34YRJ0-RYkAvKDktvG8q9KRHUCE",
     authDomain: "blacktea-1337.firebaseapp.com",
@@ -327,11 +328,9 @@
     appId: "1:174305132603:web:ba066d1f0e6aa3696b9c1e",
     measurementId: "G-LP4FFSZ0XR"
   };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
 
-<!-- App code phải load sau khi db đã có -->
-<script src="app.js"></script>
+  const app = initializeApp(firebaseConfig);
+  window.db = getFirestore(app); // ✅ để app.js dùng được
+</script>
 </body>
 </html>>
