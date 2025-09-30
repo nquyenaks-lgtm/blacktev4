@@ -548,8 +548,6 @@ function updateFinalTotal() {
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 // =============================
 // Hàm xuất hóa đơn & lưu online
-// =============================
-// ================== XUẤT HÓA ĐƠN (Thanh toán) ==================
 function confirmPayment() {
   if (!currentTable) {
     alert("❌ Không có bàn nào đang chọn");
@@ -569,15 +567,12 @@ function confirmPayment() {
     total: final
   };
 
-  try {
-    // Lưu vào Firebase Realtime Database
-    const ordersRef = ref(db, "orders");
-    const newOrderRef = push(ordersRef);
-    set(newOrderRef, order)
-      .then(() => {
+  if (typeof window.saveOrderToRealtime === 'function') {
+    window.saveOrderToRealtime(order).then(res => {
+      if (res.success) {
         alert("✅ Hóa đơn đã lưu online!");
 
-        // Lưu local (HISTORY)
+        // Lưu local
         HISTORY.push(order);
         saveAll();
 
@@ -588,17 +583,14 @@ function confirmPayment() {
         // Quay lại màn hình chính
         $('payment-screen').style.display = 'none';
         backToTables();
-      })
-      .catch((err) => {
-        console.error("❌ Lỗi khi lưu đơn:", err);
-        alert("Không lưu được hóa đơn!");
-      });
-  } catch (error) {
-    console.error("❌ Firebase chưa khởi tạo:", error);
-    alert("Firebase chưa được cấu hình!");
+      } else {
+        alert("❌ Lưu online thất bại!");
+      }
+    });
+  } else {
+    alert("❌ Firebase chưa cấu hình đúng!");
   }
 }
-
 // Settings screens
 function openSettings(){ $('table-screen').style.display='none'; $('menu-screen').style.display='none'; $('history-screen').style.display='none'; $('settings-screen').style.display='block'; }
 function openMenuSettings(){ $('settings-screen').style.display='none'; $('menu-settings-screen').style.display='block'; renderCategoriesList(); renderMenuSettings(); populateCatSelect(); }
