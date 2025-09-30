@@ -316,30 +316,24 @@
 </div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { 
-    getFirestore, 
-    collection, 
-    addDoc, 
-    getDocs, 
-    query, 
-    orderBy 
-  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+  import { getDatabase, ref, set, push } 
+    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js"; <!-- 👈 thêm dòng này -->
 
   const firebaseConfig = {
     apiKey: "AIzaSyBJ-H3Q34YRJ0-RYkAvKDktvG8q9KRHUCE",
     authDomain: "blacktea-1337.firebaseapp.com",
+    databaseURL: "https://blacktea-1337-default-rtdb.firebaseio.com", <!-- 👈 thêm dòng này -->
     projectId: "blacktea-1337",
-    storageBucket: "blacktea-1337.firebasestorage.app",
+    storageBucket: "blacktea-1337.appspot.com",
     messagingSenderId: "174305132603",
     appId: "1:174305132603:web:ba066d1f0e6aa3696b9c1e",
     measurementId: "G-LP4FFSZ0XR"
   };
 
-  // Khởi tạo app và Firestore
   const app = initializeApp(firebaseConfig);
-  window.db = getFirestore(app); // cho app.js dùng
-</script> 
-  <!-- App code -->
+  const analytics = getAnalytics(app);
+</script>
 <script src="app.js"></script>
 </body> 
 </html>>
