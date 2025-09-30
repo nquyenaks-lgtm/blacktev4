@@ -525,22 +525,20 @@ function updateFinalTotal() {
     subtotal += item.price * item.qty;
   });
 
-  // Lấy discount từ input nếu có
-  let discountInput = parseInt(document.getElementById("discount-input")?.value || "0");
+  // lấy discount từ input
+  let discountInput = parseInt(document.getElementById("discount")?.value || "0"); // 👈 đã sửa
   let discount = 0;
 
   if (discountInput > 0 && discountInput <= 100) {
-    // giảm % theo tổng
     discount = Math.floor(subtotal * discountInput / 100);
   } else if (discountInput >= 1000) {
-    // giảm số tiền trực tiếp
     discount = discountInput;
   }
 
   let final = Math.max(subtotal - discount, 0);
 
-  // Nếu có chỗ hiển thị tổng thì update luôn
-  const totalEl = document.getElementById("final-total");
+  // cập nhật tổng hiển thị
+  const totalEl = document.getElementById("pay-final-total"); // 👈 đã sửa
   if (totalEl) totalEl.innerText = final.toLocaleString() + " VND";
 
   return { subtotal, discount, final };
