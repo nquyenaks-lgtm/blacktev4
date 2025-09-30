@@ -541,46 +541,7 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 // inbill
 function confirmPayment(){
-  if (!currentTable) {
-    alert("❌ Không có bàn nào đang chọn");
-    return;
-  }
-
-  // Tính toán tổng tiền
-  const { subtotal, discount, final } = updateFinalTotal();
-  const d = new Date();  
-
-  // Tạo record bill
-  const rec = { 
-    table: currentTable.name, 
-    time: nowStr(d),
-    iso: isoDateKey(d),
-    items: currentTable.cart.slice(), 
-    subtotal, 
-    discount, 
-    total: final 
-  };
-
-  // 👉 Lưu online vào Firestore
-  db.collection("bills").add(rec)
-    .then(() => {
-      alert("✅ Bill đã lưu lên Firestore!");
-    })
-    .catch(err => {
-      alert("❌ Firestore error: " + err.message);
-    });
-
-  // 👉 Lưu local (phòng khi mất mạng)
-  HISTORY.push(rec);
-  saveAll();
-
-  // 👉 Xoá bàn hiện tại
-  TABLES = TABLES.filter(t => t.id !== currentTable.id);
-  saveAll();
-
-  // 👉 Đóng màn hình thanh toán, quay lại danh sách bàn
-  $('payment-screen').style.display = 'none';
-  backToTables();
+  alert(">>> confirmPayment chạy OK");
 }
 
 // print final bill
@@ -892,4 +853,3 @@ window.addEventListener('load', ()=>{
   renderTables(); renderCategories(); populateCatSelect(); renderMenuSettings(); saveAll();
 });
 
-console.log("✅ app.js loaded, confirmPayment =", typeof confirmPayment);
