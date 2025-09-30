@@ -2,7 +2,7 @@
 let selectedTable = null;
 let isAddingMore = false;
 function formatCurrency(n){
-  return n.toLocaleString('vi-VN') + " VND";
+  return n.toLocaleString('vi-VN');
 }
 const KEY_MENU = 'BT8_MENU';
 const KEY_CATS = 'BT8_CATS';
