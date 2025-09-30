@@ -547,47 +547,76 @@ function updateFinalTotal() {
 // close payment (back to table screen)
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 // =============================
-// Hàm xuất hóa đơn & lưu online
 function confirmPayment() {
-  if (!currentTable) {
-    alert("❌ Không có bàn nào đang chọn");
+  if (!currentTable || !currentTable.cart || currentTable.cart.length === 0) {
+    alert("Không có món nào để thanh toán!");
     return;
   }
 
-  const { subtotal, discount, final } = updateFinalTotal();
-  const d = new Date();
+  // ===== Tính tổng và chiết khấu =====
+  const subtotal = currentTable.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const discount = parseInt(document.getElementById("discountInput")?.value) || 0;
 
+  let finalTotal = subtotal;
+  if (discount > 0 && discount <= 100) {
+    finalTotal = subtotal - Math.floor(subtotal * discount / 100);
+  } else if (discount >= 1000) {
+    finalTotal = Math.max(0, subtotal - discount);
+  }
+
+  // ===== Tạo hóa đơn =====
+  const d = new Date();
   const order = {
+    id: Date.now(),
     table: currentTable.name,
+    createdAt: d.toISOString(),
     time: d.toLocaleString(),
-    iso: d.toISOString(),
-    items: currentTable.cart.slice(),
+    items: currentTable.cart.map(it => ({
+      name: it.name,
+      qty: it.qty,
+      price: it.price
+    })),
     subtotal,
     discount,
-    total: final
+    total: finalTotal
   };
 
+  // ===== In bill chi tiết =====
+  let billText = `HÓA ĐƠN - ${order.table}\n${order.time}\n\n`;
+  order.items.forEach(it => {
+    billText += `- ${it.name} x${it.qty} = ${formatCurrency(it.price * it.qty)} VND\n`;
+  });
+  billText += "------------------\n";
+  billText += `Tạm tính: ${formatCurrency(order.subtotal)} VND\n`;
+  if (order.discount > 0) billText += `Chiết khấu: ${order.discount}\n`;
+  billText += `Tổng cộng: ${formatCurrency(order.total)} VND`;
+
+  alert(billText); // 👉 tạm thời hiện popup, sau này có thể thay bằng in ra giấy
+
+  // ===== Lưu vào localStorage =====
+  let history = JSON.parse(localStorage.getItem("history")) || [];
+  history.push(order);
+  localStorage.setItem("history", JSON.stringify(history));
+
+  // ===== Lưu Firebase (nếu có cấu hình) =====
   if (typeof window.saveOrderToRealtime === 'function') {
     window.saveOrderToRealtime(order).then(res => {
       if (res.success) {
-        alert("✅ Hóa đơn đã lưu online!");
-
-        HISTORY.push(order);
-        saveAll();
-
-        // Xóa bàn đã thanh toán
-        TABLES = TABLES.filter(t => t.id !== currentTable.id);
-        saveAll();
-
-        $('payment-screen').style.display = 'none';
-        backToTables();
+        console.log("✅ Hóa đơn đã lưu Firebase");
       } else {
-        alert("❌ Lưu online thất bại!");
+        console.warn("⚠️ Lưu Firebase thất bại:", res.error);
       }
     });
-  } else {
-    alert("❌ Firebase chưa cấu hình đúng!");
   }
+
+  // ===== Reset bàn =====
+  currentTable.cart = [];
+  TABLES = TABLES.filter(t => t.id !== currentTable.id);
+  saveAll();
+
+  $("payment-screen").style.display = "none";
+  currentTable = null;
+  renderTables();
 }
 // Settings screens
 function openSettings(){ $('table-screen').style.display='none'; $('menu-screen').style.display='none'; $('history-screen').style.display='none'; $('settings-screen').style.display='block'; }
