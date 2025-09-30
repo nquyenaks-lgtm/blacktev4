@@ -314,18 +314,20 @@
     <button onclick="closeCustomAlert()">Xác nhận</button>
   </div>
 </div>
+<!-- App logic -->
+<script src="app.js"></script>
+
+<!-- Firebase đặt cuối -->
 <script type="module">
-  // Import SDKs từ Firebase
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
   import { getDatabase, ref, push, set } 
     from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
-  // Cấu hình Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyBJ-H3Q34YRJ0-RYkAvKDktvG8q9KRHUCE",
     authDomain: "blacktea-1337.firebaseapp.com",
-    databaseURL: "https://blacktea-1337-default-rtdb.firebaseio.com", // 👈 rất quan trọng
+    databaseURL: "https://blacktea-1337-default-rtdb.firebaseio.com",
     projectId: "blacktea-1337",
     storageBucket: "blacktea-1337.appspot.com",
     messagingSenderId: "174305132603",
@@ -333,12 +335,11 @@
     measurementId: "G-LP4FFSZ0XR"
   };
 
-  // Khởi tạo Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-  window.db = getDatabase(app);   // 👈 để app.js dùng được
+  window.db = getDatabase(app);
 
-  // Helper toàn cục: Lưu order vào Realtime Database
+  // helper toàn cục để app.js gọi
   window.saveOrderToRealtime = async function(order) {
     try {
       const ordersRef = ref(window.db, "orders");
