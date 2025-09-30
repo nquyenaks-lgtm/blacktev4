@@ -554,46 +554,53 @@ function updateFinalTotal() {
 
 // close payment (back to table screen)
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
-// inbill
-function confirmPayment(){
-  alert("currentTable = " + JSON.stringify(currentTable));
+// ================== XUẤT HÓA ĐƠN (Thanh toán) ==================
+function confirmPayment() {
+  if (!currentTable) {
+    alert("❌ Không có bàn nào đang chọn");
+    return;
+  }
 
+  // Tính tổng tiền, chiết khấu, số tiền cuối
   const { subtotal, discount, final } = updateFinalTotal();
-  alert(">>> Tính tổng xong: subtotal=" + subtotal + ", discount=" + discount + ", final=" + final);
 
-  const d = new Date();  
-  alert(">>> Tạo ngày xong: " + d.toISOString());
-
-  const rec = { 
-    table: currentTable.name, 
-    time: nowStr(d),
-    iso: isoDateKey(d),
-    items: currentTable.cart.slice(), 
-    subtotal, 
-    discount, 
-    total: final 
+  // Tạo hóa đơn
+  const d = new Date();
+  const rec = {
+    table: currentTable.name,
+    time: d.toLocaleString(),
+    iso: d.toISOString().slice(0, 10), // yyyy-mm-dd
+    items: currentTable.cart.slice(),
+    subtotal,
+    discount,
+    total: final
   };
-  alert(">>> Tạo record xong: " + JSON.stringify(rec));
 
-  db.collection("bills").add(rec)
-    .then(() => {
-      alert("✅ Bill đã lưu Firestore!");
-    })
-    .catch(err => {
-      alert("❌ Lỗi Firestore: " + err.message);
-    });
+  // ====== LƯU FIRESTORE (nếu có db) ======
+  if (typeof db !== "undefined") {
+    db.collection("bills").add(rec)
+      .then(() => {
+        console.log("✅ Bill đã lưu Firestore:", rec);
+      })
+      .catch(err => {
+        console.error("❌ Lỗi Firestore:", err.message);
+      });
+  }
 
+  // ====== LƯU LOCAL ======
   HISTORY.push(rec);
   saveAll();
+
+  // Xóa bàn khỏi danh sách
   TABLES = TABLES.filter(t => t.id !== currentTable.id);
   saveAll();
 
+  // Quay lại danh sách bàn
   $('payment-screen').style.display = 'none';
   backToTables();
 
-  alert(">>> confirmPayment kết thúc");
+  alert("✅ Thanh toán thành công cho " + currentTable.name);
 }
-
 // print final bill
 function printFinalBill(rec){
   const win = window.open("", "In hoá đơn", "width=400,height=600");
