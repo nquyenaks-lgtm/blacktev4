@@ -523,16 +523,32 @@ function renderPaymentPreview(){
 }
 
 // compute final total based on discount input
-function updateFinalTotal(){
-  if(!currentTable) return;
-  const subtotal = currentTable.cart.reduce((s,i)=> s + i.price*i.qty, 0);
-  const raw = $('discount-input').value.trim();
+function updateFinalTotal() {
+  if (!currentTable) return { subtotal: 0, discount: 0, final: 0 };
+
+  let subtotal = 0;
+  currentTable.cart.forEach(item => {
+    subtotal += item.price * item.qty;
+  });
+
+  // Lấy discount từ input nếu có
+  let discountInput = parseInt(document.getElementById("discount-input")?.value || "0");
   let discount = 0;
-  if(!raw) discount = 0;
-  else if(raw.endsWith('%')){ const pct = parseFloat(raw.slice(0,-1)); if(!isNaN(pct)) discount = subtotal * (pct/100); }
-  else { const v = parseFloat(raw.replace(/[^0-9.-]/g,'')); if(!isNaN(v)) discount = v; }
-  const final = Math.max(0, Math.round(subtotal - discount));
-  $('pay-final-total').innerText = fmtV(final);
+
+  if (discountInput > 0 && discountInput <= 100) {
+    // giảm % theo tổng
+    discount = Math.floor(subtotal * discountInput / 100);
+  } else if (discountInput >= 1000) {
+    // giảm số tiền trực tiếp
+    discount = discountInput;
+  }
+
+  let final = Math.max(subtotal - discount, 0);
+
+  // Nếu có chỗ hiển thị tổng thì update luôn
+  const totalEl = document.getElementById("final-total");
+  if (totalEl) totalEl.innerText = final.toLocaleString() + " VND";
+
   return { subtotal, discount, final };
 }
 
