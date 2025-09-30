@@ -891,3 +891,5 @@ window.addEventListener('load', ()=>{
   const brand = document.getElementById('brand'); if(brand) brand.addEventListener('click', ()=> backToTables());
   renderTables(); renderCategories(); populateCatSelect(); renderMenuSettings(); saveAll();
 });
+
+console.log("✅ app.js loaded, confirmPayment =", typeof confirmPayment);
