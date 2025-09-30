@@ -553,7 +553,7 @@ function confirmPayment() {
     return;
   }
 
-  // ===== Tính tổng và chiết khấu =====
+  // ===== Tính tổng & chiết khấu =====
   const subtotal = currentTable.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const discount = parseInt(document.getElementById("discountInput")?.value) || 0;
 
@@ -564,7 +564,7 @@ function confirmPayment() {
     finalTotal = Math.max(0, subtotal - discount);
   }
 
-  // ===== Tạo hóa đơn =====
+  // ===== Tạo object đơn hàng =====
   const d = new Date();
   const order = {
     id: Date.now(),
@@ -581,33 +581,38 @@ function confirmPayment() {
     total: finalTotal
   };
 
-  // ===== In bill chi tiết =====
-  let billText = `HÓA ĐƠN - ${order.table}\n${order.time}\n\n`;
+  // ===== Hiển thị hóa đơn ngay trong UI =====
+  let billHTML = `<h3>HÓA ĐƠN - ${order.table}</h3><p>${order.time}</p><table style="width:100%;">`;
+  billHTML += `<tr><th align="left">Tên</th><th>SL</th><th align="right">Thành tiền</th></tr>`;
   order.items.forEach(it => {
-    billText += `- ${it.name} x${it.qty} = ${formatCurrency(it.price * it.qty)} VND\n`;
+    billHTML += `<tr>
+      <td>${it.name}</td>
+      <td align="center">${it.qty}</td>
+      <td align="right">${formatCurrency(it.price * it.qty)} VND</td>
+    </tr>`;
   });
-  billText += "------------------\n";
-  billText += `Tạm tính: ${formatCurrency(order.subtotal)} VND\n`;
-  if (order.discount > 0) billText += `Chiết khấu: ${order.discount}\n`;
-  billText += `Tổng cộng: ${formatCurrency(order.total)} VND`;
+  billHTML += `</table><hr>`;
+  billHTML += `<p>Tạm tính: ${formatCurrency(order.subtotal)} VND</p>`;
+  if (order.discount > 0) {
+    billHTML += `<p>Chiết khấu: ${order.discount}${order.discount <= 100 ? "%" : " VND"}</p>`;
+  }
+  billHTML += `<h4>Tổng cộng: ${formatCurrency(order.total)} VND</h4>`;
 
-  alert(billText); // 👉 tạm thời hiện popup, sau này có thể thay bằng in ra giấy
+  document.getElementById("payment-screen").innerHTML = billHTML;
 
-  // ===== Lưu vào localStorage =====
+  // ===== Lưu localStorage & render lịch sử =====
   let history = JSON.parse(localStorage.getItem("history")) || [];
   history.push(order);
   localStorage.setItem("history", JSON.stringify(history));
+  renderHistory();
 
-  // ===== Lưu Firebase (nếu có cấu hình) =====
-  if (typeof window.saveOrderToRealtime === 'function') {
-    window.saveOrderToRealtime(order).then(res => {
-      if (res.success) {
-        console.log("✅ Hóa đơn đã lưu Firebase");
-      } else {
-        console.warn("⚠️ Lưu Firebase thất bại:", res.error);
-      }
-    });
-  }
+  // ===== Reset bàn =====
+  currentTable.cart = [];
+  TABLES = TABLES.filter(t => t.id !== currentTable.id);
+  saveAll();
+  currentTable = null;
+  renderTables();
+}
 
   // ===== Reset bàn =====
   currentTable.cart = [];
