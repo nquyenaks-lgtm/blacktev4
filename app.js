@@ -541,14 +541,13 @@ function closePayment(){ $('payment-screen').style.display='none'; $('menu-scree
 // inbill
 function confirmPayment(){
   alert(">>> confirmPayment bắt đầu chạy");
-alert("currentTable = " + JSON.stringify(currentTable));
-  if (!currentTable) {
-    alert("❌ Không có bàn nào đang chọn");
-    return;
-  }
+  alert("currentTable = " + JSON.stringify(currentTable));
 
   const { subtotal, discount, final } = updateFinalTotal();
+  alert(">>> Tính tổng xong: subtotal=" + subtotal + ", discount=" + discount + ", final=" + final);
+
   const d = new Date();  
+  alert(">>> Tạo ngày xong: " + d.toISOString());
 
   const rec = { 
     table: currentTable.name, 
@@ -559,10 +558,8 @@ alert("currentTable = " + JSON.stringify(currentTable));
     discount, 
     total: final 
   };
+  alert(">>> Tạo record xong: " + JSON.stringify(rec));
 
-  alert(">>> Chuẩn bị lưu Firestore: " + JSON.stringify(rec));
-
-  // Lưu Firestore
   db.collection("bills").add(rec)
     .then(() => {
       alert("✅ Bill đã lưu Firestore!");
@@ -571,15 +568,11 @@ alert("currentTable = " + JSON.stringify(currentTable));
       alert("❌ Lỗi Firestore: " + err.message);
     });
 
-  // Lưu local
   HISTORY.push(rec);
   saveAll();
-
-  // Xoá bàn
   TABLES = TABLES.filter(t => t.id !== currentTable.id);
   saveAll();
 
-  // Quay lại danh sách bàn
   $('payment-screen').style.display = 'none';
   backToTables();
 
