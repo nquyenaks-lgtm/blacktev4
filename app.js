@@ -549,26 +549,45 @@ function closePayment(){ $('payment-screen').style.display='none'; $('menu-scree
 // =============================
 // Hàm xuất hóa đơn & lưu online
 // =============================
+// ================== XUẤT HÓA ĐƠN (Thanh toán) ==================
 function confirmPayment() {
-  if (!currentTable) return;
+  if (!currentTable) {
+    alert("❌ Không có bàn nào đang chọn");
+    return;
+  }
 
-  // Gom dữ liệu đơn hàng
+  const { subtotal, discount, final } = updateFinalTotal();
+  const d = new Date();
+
   const order = {
-    ...currentTable,
-    createdAt: new Date().toISOString()
+    table: currentTable.name,
+    time: d.toLocaleString(),
+    iso: d.toISOString(),
+    items: currentTable.cart.slice(),
+    subtotal,
+    discount,
+    total: final
   };
 
   try {
-    // Lưu lên Firebase Realtime Database
-    const db = getDatabase();
+    // Lưu vào Firebase Realtime Database
     const ordersRef = ref(db, "orders");
     const newOrderRef = push(ordersRef);
     set(newOrderRef, order)
       .then(() => {
         alert("✅ Hóa đơn đã lưu online!");
-        // Reset giỏ hàng sau khi lưu
-        currentTable.cart = [];
-        renderCart();
+
+        // Lưu local (HISTORY)
+        HISTORY.push(order);
+        saveAll();
+
+        // Xóa bàn đã thanh toán
+        TABLES = TABLES.filter(t => t.id !== currentTable.id);
+        saveAll();
+
+        // Quay lại màn hình chính
+        $('payment-screen').style.display = 'none';
+        backToTables();
       })
       .catch((err) => {
         console.error("❌ Lỗi khi lưu đơn:", err);
@@ -578,43 +597,6 @@ function confirmPayment() {
     console.error("❌ Firebase chưa khởi tạo:", error);
     alert("Firebase chưa được cấu hình!");
   }
-}
-// print final bill
-function printFinalBill(rec){
-  const win = window.open("", "In hoá đơn", "width=400,height=600");
-  if (!win) {
-    alert("Trình duyệt đang chặn cửa sổ in. Hãy bật cho phép popup.");
-    return;
-  }
-
-  let html = `
-    <html><head><title>Hoá đơn</title></head><body>
-    <h3 style="text-align:center">HOÁ ĐƠN</h3>
-    <p><b>Bàn/Khách:</b> ${rec.table}</p>
-    <p><b>Thời gian:</b> ${rec.time}</p>
-    <hr>
-  `;
-  rec.items.forEach(it=>{
-    html += `<div>${it.qty} x ${it.name} - ${formatCurrency(it.price * it.qty)}</div>`;
-  });
-  html += `
-    <hr>
-    <p><b>Tạm tính:</b> ${formatCurrency(rec.subtotal)}</p>
-    <p><b>Giảm giá:</b> ${rec.discount > 0 ? rec.discount : 0}</p>
-    <p><b>Tổng cộng:</b> ${formatCurrency(rec.total)}</p>
-    <hr>
-    <p style="text-align:center">Cám ơn quý khách!</p>
-    </body></html>
-  `;
-
-  win.document.write(html);
-  win.document.close();
-
-  // chờ 500ms để trình duyệt render rồi in
-  setTimeout(() => {
-    win.print();
-    win.close();
-  }, 500);
 }
 
 // Settings screens
