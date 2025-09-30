@@ -540,7 +540,50 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 // inbill
 function confirmPayment(){
-  alert(">>> confirmPayment chạy OK");
+  alert(">>> confirmPayment bắt đầu chạy");
+
+  if (!currentTable) {
+    alert("❌ Không có bàn nào đang chọn");
+    return;
+  }
+
+  const { subtotal, discount, final } = updateFinalTotal();
+  const d = new Date();  
+
+  const rec = { 
+    table: currentTable.name, 
+    time: nowStr(d),
+    iso: isoDateKey(d),
+    items: currentTable.cart.slice(), 
+    subtotal, 
+    discount, 
+    total: final 
+  };
+
+  alert(">>> Chuẩn bị lưu Firestore: " + JSON.stringify(rec));
+
+  // Lưu Firestore
+  db.collection("bills").add(rec)
+    .then(() => {
+      alert("✅ Bill đã lưu Firestore!");
+    })
+    .catch(err => {
+      alert("❌ Lỗi Firestore: " + err.message);
+    });
+
+  // Lưu local
+  HISTORY.push(rec);
+  saveAll();
+
+  // Xoá bàn
+  TABLES = TABLES.filter(t => t.id !== currentTable.id);
+  saveAll();
+
+  // Quay lại danh sách bàn
+  $('payment-screen').style.display = 'none';
+  backToTables();
+
+  alert(">>> confirmPayment kết thúc");
 }
 
 // print final bill
