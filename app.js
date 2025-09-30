@@ -578,14 +578,14 @@ function confirmPayment() {
 
   // ====== LƯU FIRESTORE (nếu có db) ======
   if (typeof db !== "undefined") {
-    db.collection("bills").add(rec)
-      .then(() => {
-        console.log("✅ Bill đã lưu Firestore:", rec);
-      })
-      .catch(err => {
-        console.error("❌ Lỗi Firestore:", err.message);
-      });
-  }
+  addDoc(collection(db, "bills"), rec)
+    .then(() => {
+      console.log("✅ Bill đã lưu Firestore:", rec);
+    })
+    .catch(err => {
+      console.error("❌ Lỗi Firestore:", err.message);
+    });
+}
 
   // ====== LƯU LOCAL ======
   HISTORY.push(rec);
