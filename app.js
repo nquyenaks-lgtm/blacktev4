@@ -869,3 +869,4 @@ window.addEventListener('load', ()=>{
   renderTables(); renderCategories(); populateCatSelect(); renderMenuSettings(); saveAll();
 });
 
+window.confirmPayment = confirmPayment;
