@@ -540,7 +540,6 @@ function updateFinalTotal(){
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
 // inbill
 function confirmPayment(){
-  alert(">>> confirmPayment bắt đầu chạy");
   alert("currentTable = " + JSON.stringify(currentTable));
 
   const { subtotal, discount, final } = updateFinalTotal();
@@ -888,3 +887,40 @@ window.addEventListener('load', ()=>{
   renderTables(); renderCategories(); populateCatSelect(); renderMenuSettings(); saveAll();
 });
 
+function confirmPayment(){
+  alert(">>> confirmPayment bắt đầu chạy");
+  alert("currentTable = " + JSON.stringify(currentTable));
+
+  // Tính tổng thủ công
+  let subtotal = 0;
+  currentTable.cart.forEach(item => {
+    subtotal += item.price * item.qty;
+  });
+  let discount = 0; // tạm thời bỏ qua
+  let final = subtotal;
+
+  alert(">>> Tính tổng xong: subtotal=" + subtotal + ", final=" + final);
+
+  const d = new Date();  
+  const rec = { 
+    table: currentTable.name, 
+    time: d.toLocaleString(),
+    iso: d.toISOString().slice(0,10), // yyyy-mm-dd
+    items: currentTable.cart.slice(), 
+    subtotal, 
+    discount, 
+    total: final 
+  };
+
+  alert(">>> Record chuẩn bị lưu: " + JSON.stringify(rec));
+
+  HISTORY.push(rec);
+  saveAll();
+  TABLES = TABLES.filter(t => t.id !== currentTable.id);
+  saveAll();
+
+  $('payment-screen').style.display = 'none';
+  backToTables();
+
+  alert(">>> confirmPayment kết thúc");
+}
