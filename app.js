@@ -541,7 +541,7 @@ function closePayment(){ $('payment-screen').style.display='none'; $('menu-scree
 // inbill
 function confirmPayment(){
   alert(">>> confirmPayment bắt đầu chạy");
-
+alert("currentTable = " + JSON.stringify(currentTable));
   if (!currentTable) {
     alert("❌ Không có bàn nào đang chọn");
     return;
