@@ -554,52 +554,38 @@ function updateFinalTotal() {
 
 // close payment (back to table screen)
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
-// ================== XUẤT HÓA ĐƠN (Thanh toán) ==================
+// =============================
+// Hàm xuất hóa đơn & lưu online
+// =============================
 function confirmPayment() {
-  if (!currentTable) {
-    alert("❌ Không có bàn nào đang chọn");
-    return;
-  }
+  if (!currentTable) return;
 
-  // Tính tổng tiền, chiết khấu, số tiền cuối
-  const { subtotal, discount, final } = updateFinalTotal();
-
-  // Tạo hóa đơn
-  const d = new Date();
-  const rec = {
-    table: currentTable.name,
-    time: d.toLocaleString(),
-    iso: d.toISOString().slice(0, 10), // yyyy-mm-dd
-    items: currentTable.cart.slice(),
-    subtotal,
-    discount,
-    total: final
+  // Gom dữ liệu đơn hàng
+  const order = {
+    ...currentTable,
+    createdAt: new Date().toISOString()
   };
 
-  // ====== LƯU FIRESTORE (nếu có db) ======
-  if (typeof db !== "undefined") {
-  addDoc(collection(db, "bills"), rec)
-    .then(() => {
-      console.log("✅ Bill đã lưu Firestore:", rec);
-    })
-    .catch(err => {
-      console.error("❌ Lỗi Firestore:", err.message);
-    });
-}
-
-  // ====== LƯU LOCAL ======
-  HISTORY.push(rec);
-  saveAll();
-
-  // Xóa bàn khỏi danh sách
-  TABLES = TABLES.filter(t => t.id !== currentTable.id);
-  saveAll();
-
-  // Quay lại danh sách bàn
-  $('payment-screen').style.display = 'none';
-  backToTables();
-
-  alert("✅ Thanh toán thành công cho " + currentTable.name);
+  try {
+    // Lưu lên Firebase Realtime Database
+    const db = getDatabase();
+    const ordersRef = ref(db, "orders");
+    const newOrderRef = push(ordersRef);
+    set(newOrderRef, order)
+      .then(() => {
+        alert("✅ Hóa đơn đã lưu online!");
+        // Reset giỏ hàng sau khi lưu
+        currentTable.cart = [];
+        renderCart();
+      })
+      .catch((err) => {
+        console.error("❌ Lỗi khi lưu đơn:", err);
+        alert("Không lưu được hóa đơn!");
+      });
+  } catch (error) {
+    console.error("❌ Firebase chưa khởi tạo:", error);
+    alert("Firebase chưa được cấu hình!");
+  }
 }
 // print final bill
 function printFinalBill(rec){
