@@ -500,25 +500,19 @@ function payTable(){ if(!currentTable) return; if(!currentTable.cart.length){ re
 }
 
 // payment preview with discount input
-function renderPaymentPreview(){
-  const container = $('pay-bill'); container.innerHTML = '';
-  if(!currentTable) return;
-  let total = 0;
-  const table = document.createElement('table'); table.className='payment-table';
-  const thead = document.createElement('tr');
-  thead.innerHTML = '<th>Tên</th><th style="text-align:right">SL</th><th style="text-align:right">Thành</th>';
-  table.appendChild(thead);
-  currentTable.cart.forEach(it=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = '<td>'+it.name+'</td><td style="text-align:right">'+it.qty+'</td><td style="text-align:right">'+fmtV(it.price*it.qty)+'</td>';
-    table.appendChild(tr);
-    total += it.price*it.qty;
+function renderPaymentPreview() {
+  if (!currentTable) return;
+  const list = $('payment-items');
+  list.innerHTML = '';
+
+  currentTable.cart.forEach(item => {
+    const li = document.createElement('li');
+    li.innerText = `${item.qty} x ${item.name} - ${(item.qty * item.price).toLocaleString()} VND`;
+    list.appendChild(li);
   });
-  container.appendChild(table);
-  // show subtotal and set final total
-  const sub = document.createElement('div'); sub.style.marginTop='8px'; sub.innerText = 'Tạm tính: ' + fmtV(total) + ' VND';
-  container.appendChild(sub);
-  $('discount-input').value = '0';
+
+  // reset chiết khấu về 0 mỗi lần mở
+  $('discount').value = '0';   // 👈 đã sửa discount-input -> discount
   updateFinalTotal();
 }
 
