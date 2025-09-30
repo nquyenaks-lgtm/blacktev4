@@ -314,10 +314,7 @@
     <button onclick="closeCustomAlert()">Xác nhận</button>
   </div>
 </div>
-<!-- App logic -->
-<script src="app.js"></script>
-
-<!-- Firebase đặt cuối -->
+<!-- Firebase đặt trước -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
@@ -339,7 +336,7 @@
   const analytics = getAnalytics(app);
   window.db = getDatabase(app);
 
-  // helper toàn cục để app.js gọi
+  // helper global
   window.saveOrderToRealtime = async function(order) {
     try {
       const ordersRef = ref(window.db, "orders");
@@ -352,5 +349,8 @@
     }
   };
 </script>
+
+<!-- App chính phải nằm SAU Firebase -->
+<script src="app.js"></script>
 </body> 
 </html>>
