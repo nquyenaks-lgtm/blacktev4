@@ -606,7 +606,7 @@ function populatePrinterSettings(){ if($('paper-size')) $('paper-size').value = 
 
 // history with filter and expandable items
 function openHistory() {
-  $('home-screen').style.display = 'none';
+  $('table-screen').style.display = 'none';
   $('payment-screen').style.display = 'none';
   $('history-screen').style.display = 'block';
 
