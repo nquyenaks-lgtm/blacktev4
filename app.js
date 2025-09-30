@@ -572,7 +572,6 @@ function confirmPayment() {
       if (res.success) {
         alert("✅ Hóa đơn đã lưu online!");
 
-        // Lưu local
         HISTORY.push(order);
         saveAll();
 
@@ -580,7 +579,6 @@ function confirmPayment() {
         TABLES = TABLES.filter(t => t.id !== currentTable.id);
         saveAll();
 
-        // Quay lại màn hình chính
         $('payment-screen').style.display = 'none';
         backToTables();
       } else {
