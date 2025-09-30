@@ -301,6 +301,8 @@
       <button class="btn btn-danger" onclick="closeTableModal()">Đóng</button>
     </div>
   </div>
+
+  <script src="app.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', ()=>{
       const b = document.getElementById('brand');
@@ -314,43 +316,6 @@
     <button onclick="closeCustomAlert()">Xác nhận</button>
   </div>
 </div>
-<!-- Firebase đặt trước -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-  import { getDatabase, ref, push, set } 
-    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBJ-H3Q34YRJ0-RYkAvKDktvG8q9KRHUCE",
-    authDomain: "blacktea-1337.firebaseapp.com",
-    databaseURL: "https://blacktea-1337-default-rtdb.firebaseio.com",
-    projectId: "blacktea-1337",
-    storageBucket: "blacktea-1337.appspot.com",
-    messagingSenderId: "174305132603",
-    appId: "1:174305132603:web:ba066d1f0e6aa3696b9c1e",
-    measurementId: "G-LP4FFSZ0XR"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  window.db = getDatabase(app);
-
-  // helper global
-  window.saveOrderToRealtime = async function(order) {
-    try {
-      const ordersRef = ref(window.db, "orders");
-      const newOrderRef = push(ordersRef);
-      await set(newOrderRef, order);
-      return { success: true };
-    } catch (err) {
-      console.error("❌ Lỗi khi lưu order:", err);
-      return { success: false, error: err };
-    }
-  };
-</script>
-
-<!-- App chính phải nằm SAU Firebase -->
-<script src="app.js"></script>
-</body> 
-</html>>
+</body>
+</html>

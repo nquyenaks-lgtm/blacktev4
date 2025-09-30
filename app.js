@@ -1,9 +1,6 @@
 // BlackTea POS v8 final - full logic with payment preview, discount, history filter and expandable history items
 let selectedTable = null;
 let isAddingMore = false;
-function formatCurrency(n){
-  return n.toLocaleString('vi-VN');
-}
 const KEY_MENU = 'BT8_MENU';
 const KEY_CATS = 'BT8_CATS';
 const KEY_TABLES = 'BT8_TABLES';
@@ -500,129 +497,107 @@ function payTable(){ if(!currentTable) return; if(!currentTable.cart.length){ re
 }
 
 // payment preview with discount input
-function renderPaymentPreview() {
-  if (!currentTable) return;
-  const list = $('payment-items');
-  list.innerHTML = '';
-
-  currentTable.cart.forEach(item => {
-    const li = document.createElement('li');
-    li.innerText = `${item.qty} x ${item.name} - ${(item.qty * item.price).toLocaleString()} VND`;
-    list.appendChild(li);
+function renderPaymentPreview(){
+  const container = $('pay-bill'); container.innerHTML = '';
+  if(!currentTable) return;
+  let total = 0;
+  const table = document.createElement('table'); table.className='payment-table';
+  const thead = document.createElement('tr');
+  thead.innerHTML = '<th>Tên</th><th style="text-align:right">SL</th><th style="text-align:right">Thành</th>';
+  table.appendChild(thead);
+  currentTable.cart.forEach(it=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+it.name+'</td><td style="text-align:right">'+it.qty+'</td><td style="text-align:right">'+fmtV(it.price*it.qty)+'</td>';
+    table.appendChild(tr);
+    total += it.price*it.qty;
   });
-
-  // reset chiết khấu về 0 mỗi lần mở
-  $('discount').value = '0';   // 👈 đã sửa discount-input -> discount
+  container.appendChild(table);
+  // show subtotal and set final total
+  const sub = document.createElement('div'); sub.style.marginTop='8px'; sub.innerText = 'Tạm tính: ' + fmtV(total) + ' VND';
+  container.appendChild(sub);
+  $('discount-input').value = '0';
   updateFinalTotal();
 }
 
 // compute final total based on discount input
-function updateFinalTotal() {
-  if (!currentTable) return { subtotal: 0, discount: 0, final: 0 };
-
-  let subtotal = 0;
-  currentTable.cart.forEach(item => {
-    subtotal += item.price * item.qty;
-  });
-
-  // lấy discount từ input
-  let discountInput = parseInt(document.getElementById("discount")?.value || "0"); // 👈 đã sửa
+function updateFinalTotal(){
+  if(!currentTable) return;
+  const subtotal = currentTable.cart.reduce((s,i)=> s + i.price*i.qty, 0);
+  const raw = $('discount-input').value.trim();
   let discount = 0;
-
-  if (discountInput > 0 && discountInput <= 100) {
-    discount = Math.floor(subtotal * discountInput / 100);
-  } else if (discountInput >= 1000) {
-    discount = discountInput;
-  }
-
-  let final = Math.max(subtotal - discount, 0);
-
-  // cập nhật tổng hiển thị
-  const totalEl = document.getElementById("pay-final-total"); // 👈 đã sửa
-  if (totalEl) totalEl.innerText = final.toLocaleString() + " VND";
-
+  if(!raw) discount = 0;
+  else if(raw.endsWith('%')){ const pct = parseFloat(raw.slice(0,-1)); if(!isNaN(pct)) discount = subtotal * (pct/100); }
+  else { const v = parseFloat(raw.replace(/[^0-9.-]/g,'')); if(!isNaN(v)) discount = v; }
+  const final = Math.max(0, Math.round(subtotal - discount));
+  $('pay-final-total').innerText = fmtV(final);
   return { subtotal, discount, final };
 }
 
 // close payment (back to table screen)
 function closePayment(){ $('payment-screen').style.display='none'; $('menu-screen').style.display='block'; renderCart(); renderMenuList(); }
-// =============================
-function confirmPayment() {
-  if (!currentTable || !currentTable.cart || currentTable.cart.length === 0) {
-    alert("Không có món nào để thanh toán!");
+
+function confirmPayment(){
+  console.log(">>> confirmPayment chạy");
+
+  const rec = { 
+    table: currentTable ? currentTable.name : "???",
+    time: new Date().toLocaleString(),
+    iso: new Date().toISOString().split("T")[0],
+    items: currentTable ? currentTable.cart.slice() : [],
+    subtotal: 0,
+    discount: 0,
+    total: 0
+  };
+
+  HISTORY.push(rec);
+  saveAll();
+
+  console.log(">>> Bill đã lưu:", rec);
+
+  TABLES = TABLES.filter(t => t.id !== currentTable.id);
+  saveAll();
+
+  $('payment-screen').style.display = 'none';
+  backToTables();
+}
+// print final bill
+function printFinalBill(rec){
+  const win = window.open("", "In hoá đơn", "width=400,height=600");
+  if (!win) {
+    alert("Trình duyệt đang chặn cửa sổ in. Hãy bật cho phép popup.");
     return;
   }
 
-  // ===== Tính tổng & chiết khấu =====
-  const subtotal = currentTable.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const discount = parseInt(document.getElementById("discountInput")?.value) || 0;
-
-  let finalTotal = subtotal;
-  if (discount > 0 && discount <= 100) {
-    finalTotal = subtotal - Math.floor(subtotal * discount / 100);
-  } else if (discount >= 1000) {
-    finalTotal = Math.max(0, subtotal - discount);
-  }
-
-  // ===== Tạo object đơn hàng =====
-  const d = new Date();
-  const order = {
-    id: Date.now(),
-    table: currentTable.name,
-    createdAt: d.toISOString(),
-    time: d.toLocaleString(),
-    items: currentTable.cart.map(it => ({
-      name: it.name,
-      qty: it.qty,
-      price: it.price
-    })),
-    subtotal,
-    discount,
-    total: finalTotal
-  };
-
-  // ===== Hiển thị hóa đơn ngay trong UI =====
-  let billHTML = `<h3>HÓA ĐƠN - ${order.table}</h3><p>${order.time}</p><table style="width:100%;">`;
-  billHTML += `<tr><th align="left">Tên</th><th>SL</th><th align="right">Thành tiền</th></tr>`;
-  order.items.forEach(it => {
-    billHTML += `<tr>
-      <td>${it.name}</td>
-      <td align="center">${it.qty}</td>
-      <td align="right">${formatCurrency(it.price * it.qty)} VND</td>
-    </tr>`;
+  let html = `
+    <html><head><title>Hoá đơn</title></head><body>
+    <h3 style="text-align:center">HOÁ ĐƠN</h3>
+    <p><b>Bàn/Khách:</b> ${rec.table}</p>
+    <p><b>Thời gian:</b> ${rec.time}</p>
+    <hr>
+  `;
+  rec.items.forEach(it=>{
+    html += `<div>${it.qty} x ${it.name} - ${formatCurrency(it.price * it.qty)}</div>`;
   });
-  billHTML += `</table><hr>`;
-  billHTML += `<p>Tạm tính: ${formatCurrency(order.subtotal)} VND</p>`;
-  if (order.discount > 0) {
-    billHTML += `<p>Chiết khấu: ${order.discount}${order.discount <= 100 ? "%" : " VND"}</p>`;
-  }
-  billHTML += `<h4>Tổng cộng: ${formatCurrency(order.total)} VND</h4>`;
+  html += `
+    <hr>
+    <p><b>Tạm tính:</b> ${formatCurrency(rec.subtotal)}</p>
+    <p><b>Giảm giá:</b> ${rec.discount > 0 ? rec.discount : 0}</p>
+    <p><b>Tổng cộng:</b> ${formatCurrency(rec.total)}</p>
+    <hr>
+    <p style="text-align:center">Cám ơn quý khách!</p>
+    </body></html>
+  `;
 
-  document.getElementById("payment-screen").innerHTML = billHTML;
+  win.document.write(html);
+  win.document.close();
 
-  // ===== Lưu localStorage & render lịch sử =====
-  let history = JSON.parse(localStorage.getItem("history")) || [];
-  history.push(order);
-  localStorage.setItem("history", JSON.stringify(history));
-  renderHistory();
-
-  // ===== Reset bàn =====
-  currentTable.cart = [];
-  TABLES = TABLES.filter(t => t.id !== currentTable.id);
-  saveAll();
-  currentTable = null;
-  renderTables();
+  // chờ 500ms để trình duyệt render rồi in
+  setTimeout(() => {
+    win.print();
+    win.close();
+  }, 500);
 }
 
-  // ===== Reset bàn =====
-  currentTable.cart = [];
-  TABLES = TABLES.filter(t => t.id !== currentTable.id);
-  saveAll();
-
-  $("payment-screen").style.display = "none";
-  currentTable = null;
-  renderTables();
-}
 // Settings screens
 function openSettings(){ $('table-screen').style.display='none'; $('menu-screen').style.display='none'; $('history-screen').style.display='none'; $('settings-screen').style.display='block'; }
 function openMenuSettings(){ $('settings-screen').style.display='none'; $('menu-settings-screen').style.display='block'; renderCategoriesList(); renderMenuSettings(); populateCatSelect(); }
@@ -639,14 +614,7 @@ function deleteMenu(i){ MENU.splice(i,1); saveAll(); renderMenuSettings(); rende
 function populatePrinterSettings(){ if($('paper-size')) $('paper-size').value = localStorage.getItem('BT8_PAPER') || '58'; if($('print-name')) $('print-name').checked = (localStorage.getItem('BT8_PRINTNAME')||'true')==='true'; }
 
 // history with filter and expandable items
-function openHistory() {
-  $('table-screen').style.display = 'none';
-  $('payment-screen').style.display = 'none';
-  $('history-screen').style.display = 'block';
-
-  // render từ local trước, sau này nối Firebase sau
-  renderHistory();   // 👈 đã bỏ loadHistoryOnline()
-}
+function openHistory(){ $('table-screen').style.display='none'; $('menu-screen').style.display='none'; $('settings-screen').style.display='none'; $('menu-settings-screen').style.display='none'; $('printer-settings-screen').style.display='none'; $('payment-screen').style.display='none'; $('history-screen').style.display='block'; renderHistory(); }
 function clearDateFilter(){ if($('history-date')){ $('history-date').value=''; renderHistory(); } }
 
 function renderHistory(){
@@ -892,5 +860,3 @@ window.addEventListener('load', ()=>{
   const brand = document.getElementById('brand'); if(brand) brand.addEventListener('click', ()=> backToTables());
   renderTables(); renderCategories(); populateCatSelect(); renderMenuSettings(); saveAll();
 });
-
-window.confirmPayment = confirmPayment;
