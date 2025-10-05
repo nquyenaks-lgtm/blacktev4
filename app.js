@@ -40,7 +40,7 @@ let MENU =  [
   { id: 19, name: "Trà sữa socola (Size L)", price: 25000, cat: "Trà sữa" },
   { id: 20, name: "Chân châu đường đen (Size M)", price: 20000, cat: "Trà sữa" },
   { id: 21, name: "Chân châu đường đen (Size L)", price: 25000, cat: "Trà sữa" },
-  { id: 22, name: "Trà đào (Size M)", price: 20000, cat: "Trà sữa" },
+  { id: 22, name: "Trà đào (Size M)", price: 15000, cat: "Trà sữa" },
   { id: 23, name: "Trà đào (Size L)", price: 25000, cat: "Trà sữa" },
   { id: 24, name: "Trà đào cam sả (Size M)", price: 20000, cat: "Trà sữa" },
   { id: 25, name: "Trà đào cam sả (Size L)", price: 25000, cat: "Trà sữa" },
