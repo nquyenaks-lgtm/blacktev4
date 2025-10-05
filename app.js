@@ -744,18 +744,21 @@ function confirmPayment() {
 
   const { subtotal, discount, final } = updateFinalTotal(); // dùng chung parser
 
-  HISTORY.push({
-    id: Date.now(),
-    table: currentTable.name,
-    items: JSON.parse(JSON.stringify(currentTable.cart)),
-    subtotal,
-    discount: Math.round(discount),
-    total: final,
-    time: new Date().toLocaleString(),
-    iso: isoDateKey(new Date())
-  });
+  const rec = {
+  id: Date.now(),
+  table: currentTable.name,
+  items: JSON.parse(JSON.stringify(currentTable.cart)),
+  subtotal,
+  discount: Math.round(discount),
+  total: final,
+  time: new Date().toLocaleString('vi-VN'),
+  iso: isoDateKey(new Date())
+};
 
-  localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY));
+// lưu Firestore
+db.collection("history").add(rec)
+  .then(() => console.log("✅ History saved:", rec))
+  .catch(err => console.error("❌ Error saving history:", err));
 
   currentTable.cart = [];
   saveAll();
