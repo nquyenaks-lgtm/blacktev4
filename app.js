@@ -472,14 +472,12 @@ function openTable(id){
 // back
 function backToTables() {
   if (currentTable && currentTable.name.startsWith('Khách mang đi')) {
-    // Nếu bàn trống (chưa order gì) → xoá bàn
     if (!currentTable.cart || currentTable.cart.length === 0) {
       TABLES = TABLES.filter(t => t.id !== currentTable.id);
       saveAll();
     }
   }
 
-  // 👇 --- Phần UI bạn đang có (giữ nguyên hoàn toàn) ---
   $('table-screen').style.display = 'block';
   $('menu-screen').style.display = 'none';
   $('settings-screen').style.display = 'none';
@@ -488,10 +486,10 @@ function backToTables() {
   $('history-screen').style.display = 'none';
   $('payment-screen').style.display = 'none';
 
-  // 👉 trả header về mặc định
   $('header-buttons').style.display = 'flex';  
   $('order-info').classList.add('hidden');
 }
+
 
 
   // 👇 --- Phần UI bạn đang có (giữ nguyên hoàn toàn) ---
