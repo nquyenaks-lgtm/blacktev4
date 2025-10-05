@@ -1053,36 +1053,33 @@ function openTableModal() {
 }
 async function syncData() {
   try {
-    // 🧹 Xóa cache cũ để đảm bảo dữ liệu mới
-    localStorage.removeItem(KEY_MENU);
-    localStorage.removeItem(KEY_CATS);
-    localStorage.removeItem(KEY_TABLES);
-    localStorage.removeItem(KEY_HISTORY);
-    localStorage.removeItem(KEY_GUEST);
+    // 🧹 Xóa localStorage
+    localStorage.clear();
 
-    // 🔄 Lấy dữ liệu mới từ Firestore
-    const docs = ["menu","categories","tables","history","guest"];
-    for (let d of docs) {
-      const snap = await db.collection("pos").doc(d).get();
-      if (snap.exists) {
-        const data = snap.data();
-        switch(d){
-          case "menu": MENU = data.data || []; localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); break;
-          case "categories": CATEGORIES = data.data || []; localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); break;
-          case "tables": TABLES = data.data || []; localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); break;
-          case "history": HISTORY = data.data || []; localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); break;
-          case "guest": GUEST_CNT = data.value || 0; localStorage.setItem(KEY_GUEST, GUEST_CNT); break;
-        }
+    // 🧹 Xóa IndexedDB (Firestore cache)
+    if (window.indexedDB) {
+      const dbs = await window.indexedDB.databases();
+      for (const db of dbs) {
+        window.indexedDB.deleteDatabase(db.name);
       }
     }
 
-    // 🔁 Render lại giao diện
-    renderTables();
-    renderCategories();
-    renderMenuList();
-    renderHistory();
+    // 🧹 Xóa Service Worker cache (nếu có)
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      for (const key of keys) {
+        await caches.delete(key);
+      }
+    }
 
-    showCustomAlert("Đồng bộ dữ liệu thành công!");
+    // ✅ Hiện thông báo trước khi reload
+    showCustomAlert("Đồng bộ thành công");
+
+    // ⏳ Đợi 1.5s cho user thấy thông báo rồi reload
+    setTimeout(() => {
+      location.reload(true);
+    }, 1500);
+
   } catch (err) {
     console.error("Lỗi đồng bộ:", err);
     showCustomAlert("Không thể đồng bộ, vui lòng thử lại.");
