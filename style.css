@@ -453,9 +453,3 @@ header {
   transition: 0.2s ease;
 }
 
-/* // category-bar chỉnh khoảng cách header */
-.category-bar {
-  margin-top: 2px;   /* chỉnh khoảng cách với header, 0 nếu muốn dính hẳn */
-  margin-bottom: 8px;
-  padding: 0;
-}
