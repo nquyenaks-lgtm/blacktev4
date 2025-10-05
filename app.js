@@ -175,8 +175,9 @@ function listenAll(){
     db.collection("pos").doc("menu").onSnapshot((snap)=>{
       if(snap.exists) {
         MENU = snap.data().data || [];
-        renderMenuSettings();   // cập nhật UI cài đặt menu
-        renderMenu();           // 👈 thêm để UI order cũng update luôn
+        localStorage.setItem(KEY_MENU, JSON.stringify(MENU));   // ✅ đồng bộ tất cả client
+        renderMenuSettings();
+        renderMenuList();
       }
     });
 
@@ -184,6 +185,7 @@ function listenAll(){
     db.collection("pos").doc("categories").onSnapshot((snap)=>{
       if(snap.exists) {
         CATEGORIES = snap.data().data || [];
+        localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES));  // ✅
         renderCategories();
         populateCatSelect();
       }
@@ -193,7 +195,8 @@ function listenAll(){
     db.collection("pos").doc("tables").onSnapshot((snap)=>{
       if(snap.exists) {
         TABLES = snap.data().data || [];
-        renderTables();   // render lại danh sách bàn
+        localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); // ✅
+        renderTables();
       }
     });
 
@@ -201,7 +204,8 @@ function listenAll(){
     db.collection("pos").doc("history").onSnapshot((snap)=>{
       if(snap.exists) {
         HISTORY = snap.data().data || [];
-        renderHistory();  // render lại lịch sử
+        localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); // ✅
+        renderHistory();
       }
     });
 
@@ -209,6 +213,7 @@ function listenAll(){
     db.collection("pos").doc("guest").onSnapshot((snap)=>{
       if(snap.exists) {
         GUEST_CNT = snap.data().value || 0;
+        localStorage.setItem(KEY_GUEST, GUEST_CNT); // ✅
       }
     });
     
@@ -216,9 +221,6 @@ function listenAll(){
     console.error("❌ Lỗi đồng bộ trực tuyến:", err);
   }
 }
-
-
-
 // render tables (sắp xếp: L = 4 cột, NT = 2 cột, T/G/N = mỗi bàn 1 hàng dọc, khác = Bàn tạm)
 function renderTables(){
   const div = $('tables');
