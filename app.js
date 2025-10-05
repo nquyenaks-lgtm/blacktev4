@@ -17,7 +17,7 @@ const FIXED_TABLES = [
 
 let MENU =  [
   // --- Cà phê ---
-  { id: 1, name: "Cà phê sữa nóng (Pha phin)", price: 15000, cat: "Cà phê" },
+  { id: 1, name: "Cà phê sữa nóng (Pha phin)", price: 150000, cat: "Cà phê" },
   { id: 2, name: "Cà phê sữa đá (Pha phin)", price: 15000, cat: "Cà phê" },
   { id: 3, name: "Cà phê đen nóng (Pha phin)", price: 15000, cat: "Cà phê" },
   { id: 4, name: "Cà phê đen đá (Pha phin)", price: 15000, cat: "Cà phê" },
