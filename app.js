@@ -1057,23 +1057,25 @@ function openHome(){
   $('home-screen').style.display = 'block';
 
   // Tiêu đề về lại BlackTea
-  $('app-title').innerText = 'BlackTea';
+  $('brand').innerText = 'BlackTea';
 
   // Góc phải là nút ⚙️ mở Cài đặt
-  $('header-btn').innerHTML = `
-    <button class="btn btn-icon" onclick="openSettings()">⚙️</button>
+  $('header-buttons').innerHTML = `
+    <span class="icon-btn" onclick="openHistory()" title="Lịch sử">🧾</span>
+    <span class="icon-btn" onclick="openSettings()" title="Cài đặt">⚙️</span>
   `;
 }
+
 function openSettings(){
   hideAllScreens();
   $('settings-screen').style.display = 'block';
 
   // Đổi tiêu đề trên header thành "BlackTea | Cài đặt"
-  $('app-title').innerText = 'BlackTea | Cài đặt';
+  $('brand').innerText = 'BlackTea | Cài đặt';
 
   // Góc phải hiện nút ❌ để quay về home
-  $('header-btn').innerHTML = `
-    <button class="btn btn-icon" onclick="openHome()">❌</button>
+  $('header-buttons').innerHTML = `
+    <button id="backBtn" onclick="openHome()">❌</button>
   `;
 }
 
