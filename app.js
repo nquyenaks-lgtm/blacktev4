@@ -1056,19 +1056,29 @@ function syncData() {
   location.reload(true);
 }
 // Phần cài đặt
+function openHome(){
+  hideAllScreens();
+  $('home-screen').style.display = 'block';
 
+  // Tiêu đề về lại BlackTea
+  $('app-title').innerText = 'BlackTea';
+
+  // Góc phải là nút ⚙️ mở Cài đặt
+  $('header-btn').innerHTML = `
+    <button class="btn btn-icon" onclick="openSettings()">⚙️</button>
+  `;
+}
 function openSettings(){
-  // Ẩn tất cả màn hình
-  $('table-screen').style.display = 'none';
-  $('menu-screen').style.display = 'none';
-  $('history-screen').style.display = 'none';
-  $('menu-settings-screen').style.display = 'none';
-  $('category-settings-screen').style.display = 'none';
-  $('item-settings-screen').style.display = 'none';
-  $('printer-settings-screen').style.display = 'none';
-
-  // Chỉ hiện màn hình cài đặt
+  hideAllScreens();
   $('settings-screen').style.display = 'block';
+
+  // Đổi tiêu đề trên header thành "BlackTea | Cài đặt"
+  $('app-title').innerText = 'BlackTea | Cài đặt';
+
+  // Góc phải hiện nút ❌ để quay về home
+  $('header-btn').innerHTML = `
+    <button class="btn btn-icon" onclick="openHome()">❌</button>
+  `;
 }
 
 function openMenuSettings(){
