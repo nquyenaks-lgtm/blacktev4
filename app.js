@@ -190,6 +190,42 @@ async function saveAll(){
     console.error("❌ Lỗi lưu Firestore:", err);
   }
 }
+function listenAll(){
+  onSnapshot(doc(db, "pos", "menu"), (snap)=>{
+    if(snap.exists()) {
+      MENU = snap.data().data;
+      renderMenuSettings();
+    }
+  });
+
+  onSnapshot(doc(db, "pos", "categories"), (snap)=>{
+    if(snap.exists()) {
+      CATEGORIES = snap.data().data;
+      renderCategories();
+      populateCatSelect();
+    }
+  });
+
+  onSnapshot(doc(db, "pos", "tables"), (snap)=>{
+    if(snap.exists()) {
+      TABLES = snap.data().data;
+      renderTables();
+    }
+  });
+
+  onSnapshot(doc(db, "pos", "history"), (snap)=>{
+    if(snap.exists()) {
+      HISTORY = snap.data().data;
+      renderHistory();
+    }
+  });
+
+  onSnapshot(doc(db, "pos", "guest"), (snap)=>{
+    if(snap.exists()) {
+      GUEST_CNT = snap.data().value;
+    }
+  });
+}
 
 
 // render tables (sắp xếp: L = 4 cột, NT = 2 cột, T/G/N = mỗi bàn 1 hàng dọc, khác = Bàn tạm)
