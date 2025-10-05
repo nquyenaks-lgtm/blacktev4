@@ -1086,5 +1086,10 @@ window.addEventListener('load', ()=>{
   hideOrderInfo();   // ✅ ẩn nút X và phần tiêu đề đơn
   backToTables();    // quay về màn hình chính
 });
-  renderTables(); renderCategories(); populateCatSelect(); renderMenuSettings(); saveAll();
+  listenAll();  // bật realtime
+renderTables(); 
+renderCategories(); 
+populateCatSelect(); 
+renderMenuSettings();
+
 });
