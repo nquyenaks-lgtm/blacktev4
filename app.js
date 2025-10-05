@@ -184,43 +184,49 @@ async function saveAll(){
 
 function listenAll(){
   try {
+    // --- Menu ---
     db.collection("pos").doc("menu").onSnapshot((snap)=>{
       if(snap.exists) {
-        MENU = snap.data().data;
-        renderMenuSettings();
+        MENU = snap.data().data || [];
+        renderMenuSettings();   // cập nhật UI cài đặt menu
+        renderMenu();           // 👈 thêm để UI order cũng update luôn
       }
     });
 
+    // --- Categories ---
     db.collection("pos").doc("categories").onSnapshot((snap)=>{
       if(snap.exists) {
-        CATEGORIES = snap.data().data;
+        CATEGORIES = snap.data().data || [];
         renderCategories();
         populateCatSelect();
       }
     });
 
+    // --- Tables ---
     db.collection("pos").doc("tables").onSnapshot((snap)=>{
       if(snap.exists) {
-        TABLES = snap.data().data;
-        renderTables();
+        TABLES = snap.data().data || [];
+        renderTables();   // render lại danh sách bàn
       }
     });
 
+    // --- History ---
     db.collection("pos").doc("history").onSnapshot((snap)=>{
       if(snap.exists) {
-        HISTORY = snap.data().data;
-        renderHistory();
+        HISTORY = snap.data().data || [];
+        renderHistory();  // render lại lịch sử
       }
     });
 
+    // --- Guest counter ---
     db.collection("pos").doc("guest").onSnapshot((snap)=>{
       if(snap.exists) {
-        GUEST_CNT = snap.data().value;
+        GUEST_CNT = snap.data().value || 0;
       }
     });
     
   } catch (err) {
-    console.error("Lỗi đồng bộ trực tuyến");
+    console.error("❌ Lỗi đồng bộ trực tuyến:", err);
   }
 }
 
