@@ -571,29 +571,33 @@ function cancelOrder(){ if(!currentTable) return; currentTable.cart=[]; renderMe
 
 function saveOrder() {
   if (!currentTable) return;
-  if (!currentTable.cart || currentTable.cart.length === 0) {
-    // không lưu nếu không có món
-    return;
-  }
+  if (!currentTable.cart || currentTable.cart.length === 0) return;
 
-  // Đánh dấu món đã được lock / lưu baseQty nếu chưa có
+  // đánh dấu món đã lock
   currentTable.cart = currentTable.cart.map(it => ({
     ...it,
     locked: true,
     baseQty: (typeof it.baseQty === 'number' && it.baseQty > 0) ? it.baseQty : it.qty
   }));
 
-  const idx = TABLES.findIndex(t => t.id === currentTable.id);
-  if (idx >= 0) {
-    // cập nhật bàn đã lưu
-    TABLES[idx] = { ...currentTable, _isDraft: false };
-  } else {
-    // thêm bàn mới (từ draft -> lưu)
-    TABLES.push({ ...currentTable, _isDraft: false });
-  }
+  const orderData = {
+    tableId: currentTable.id,
+    tableName: currentTable.name,
+    cart: currentTable.cart,
+    time: new Date().toISOString(),
+    total: currentTable.cart.reduce((sum, i) => sum + i.price * i.qty, 0)
+  };
 
-  saveAll && saveAll();   // hàm lưu localStorage (giữ nguyên)
-  renderTables && renderTables();
+  // 🔥 lưu vào Firestore (dùng tableId làm documentId để tránh trùng lặp)
+  db.collection("orders").doc(String(currentTable.id)).set(orderData)
+    .then(() => {
+      console.log("✅ Order saved for table:", currentTable.name);
+      backToTables();
+    })
+    .catch(error => {
+      console.error("❌ Error saving order:", error);
+    });
+}
 
   // ẩn order-info + hiện lại header buttons + ẩn X
   hideOrderInfo();
