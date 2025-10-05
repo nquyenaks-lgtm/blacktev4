@@ -111,7 +111,7 @@ let MENU = JSON.parse(localStorage.getItem(KEY_MENU)) || [
 ];
 
 let CATEGORIES = JSON.parse(localStorage.getItem(KEY_CATS)) || ["Cà phê","Trà sữa","Sinh tố","Sữa chua","Giải khát","Trà & Nước ép","Matcha","Ăn vặt","Topping"];
-let TABLES = JSON.parse(localStorage.getItem(KEY_TABLES)) || [];
+let TABLES = [];
 
 // ✅ Migration: đảm bảo mỗi item trong cart có locked và baseQty
 TABLES = TABLES.map(t => ({
@@ -124,8 +124,8 @@ TABLES = TABLES.map(t => ({
                : (it.locked ? it.qty : 0)
   }))
 }));
-let HISTORY = JSON.parse(localStorage.getItem(KEY_HISTORY)) || [];
-let GUEST_CNT = parseInt(localStorage.getItem(KEY_GUEST) || '0');
+let HISTORY = [];
+let GUEST_CNT = 0;
 
 let currentTable = null;
 let createdFromMain = false;
@@ -171,24 +171,16 @@ function displayDateFromISO(iso){
 }
 async function saveAll(){ 
   try {
-    // Lưu localStorage (phòng offline)
-    localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); 
-    localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); 
-    localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); 
-    localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); 
-    localStorage.setItem(KEY_GUEST, String(GUEST_CNT)); 
-
-    // Lưu Firestore
     await db.collection("pos").doc("menu").set({ data: MENU });
     await db.collection("pos").doc("categories").set({ data: CATEGORIES });
     await db.collection("pos").doc("tables").set({ data: TABLES });
     await db.collection("pos").doc("history").set({ data: HISTORY });
     await db.collection("pos").doc("guest").set({ value: GUEST_CNT });
-
   } catch (err) {
-    console.error("Lỗi lưu đơn trực tuyến"); 
+    console.error("❌ Lỗi lưu online:", err); 
   }
 }
+
 
 function listenAll(){
   try {
