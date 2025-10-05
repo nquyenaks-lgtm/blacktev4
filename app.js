@@ -1,4 +1,21 @@
 // BlackTea POS v8 final - full logic with payment preview, discount, history filter and expandable history items
+// Firebase
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAv7Ba3I6E-aF-3ZPlcoabAlxynxfc1cEA",
+  authDomain: "blackteapos-9016e.firebaseapp.com",
+  projectId: "blackteapos-9016e",
+  storageBucket: "blackteapos-9016e.firebasestorage.app",
+  messagingSenderId: "133051542981",
+  appId: "1:133051542981:web:9f4937c264fa956a456fac",
+  measurementId: "G-GVRBHCSPWM"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 let selectedTable = null;
 let isAddingMore = false;
 const KEY_MENU = 'BT8_MENU';
