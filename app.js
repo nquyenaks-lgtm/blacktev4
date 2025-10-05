@@ -338,7 +338,7 @@ function makeTableCard(t){
 }
 // add guest
 function addGuest() {
-  // Xóa bàn trống
+  // Xóa bàn trống (chưa gọi món) nếu có
   const emptyGuests = TABLES.filter(
     t => t.name.startsWith('Khách mang đi') && (!t.cart || t.cart.length === 0)
   );
@@ -347,19 +347,30 @@ function addGuest() {
     saveAll();
   }
 
-  // Tìm số tiếp theo dựa vào TABLES trên Firestore
+  // ===== Tính số tiếp theo =====
+  // Lấy số lớn nhất từ bàn hiện tại
   const takeawayTables = TABLES.filter(t => t.name.startsWith('Khách mang đi'));
-  const maxNum = takeawayTables.reduce((max, t) => {
+  const maxNumTable = takeawayTables.reduce((max, t) => {
     const m = t.name.match(/\d+/);
     return m ? Math.max(max, parseInt(m[0])) : max;
   }, 0);
 
-  const nextNum = maxNum + 1;
+  // Lấy số lớn nhất từ lịch sử trong ngày hôm nay
+  const today = isoDateKey(new Date());
+  const takeawayHistory = HISTORY.filter(h => h.table.startsWith('Khách mang đi') && h.iso === today);
+  const maxNumHistory = takeawayHistory.reduce((max, h) => {
+    const m = h.table.match(/\d+/);
+    return m ? Math.max(max, parseInt(m[0])) : max;
+  }, 0);
 
+  // Số tiếp theo = max của Table và History + 1
+  const nextNum = Math.max(maxNumTable, maxNumHistory) + 1;
+
+  // ===== Tạo bàn mới =====
   const id = Date.now();
   const name = 'Khách mang đi ' + nextNum;
-
   const tableObj = { id, name, cart: [], createdAt: Date.now() };
+
   TABLES.push(tableObj);
   saveAll();
   renderTables();
