@@ -231,32 +231,42 @@
     </main>
 
     <main id="menu-settings-screen" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h2>Cài đặt Menu</h2>
-        <button class="btn btn-light" onclick="openSettings()">← Quay lại</button>
-      </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
-        <div style="flex:1;min-width:220px">
-          <h4>Danh mục</h4>
-          <div style="margin-bottom:8px">
-            <input id="new-cat-name" placeholder="Danh mục" />
-            <button class="btn btn-secondary" onclick="addCategory()">Thêm DM</button>
-          </div>
-          <ul id="categories-list" class="cart-list"></ul>
-        </div>
-        <div style="flex:2;min-width:260px">
-          <h4>Quản lý Món</h4>
-          <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px">
-            <select id="cat-select"></select>
-            <input id="new-item-name" placeholder="Tên món" />
-            <input id="new-item-price" placeholder="Giá" type="number" />
-            <button class="btn btn-primary" onclick="addMenuItem()">Thêm món</button>
-          </div>
-          <ul id="menu-settings-list" class="cart-list"></ul>
-        </div>
-      </div>
-    </main>
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h2>Cài đặt Menu</h2>
+    <button class="btn btn-light" onclick="openSettings()">← Quay lại</button>
+  </div>
+  <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px">
+    <button class="btn btn-primary" onclick="openCategorySettings()">📂 Quản lý Danh mục</button>
+    <button class="btn btn-primary" onclick="openItemSettings()">🍜 Quản lý Món</button>
+  </div>
+</main>
+    // Quản lý món 
+<main id="category-settings-screen" style="display:none">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h2>Quản lý Danh mục</h2>
+    <button class="btn btn-light" onclick="openMenuSettings()">← Quay lại</button>
+  </div>
+  <div style="margin-top:12px">
+    <input id="new-cat-name" placeholder="Tên danh mục" />
+    <button class="btn btn-secondary" onclick="addCategory()">Thêm</button>
+  </div>
+  <ul id="categories-list" class="cart-list" style="margin-top:8px"></ul>
+</main>
 
+<main id="item-settings-screen" style="display:none">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h2>Quản lý Món</h2>
+    <button class="btn btn-light" onclick="openMenuSettings()">← Quay lại</button>
+  </div>
+  <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">
+    <select id="cat-select"></select>
+    <input id="new-item-name" placeholder="Tên món" />
+    <input id="new-item-price" type="number" placeholder="Giá" />
+    <button class="btn btn-primary" onclick="addMenuItem()">Thêm món</button>
+  </div>
+  <ul id="menu-settings-list" class="cart-list" style="margin-top:8px"></ul>
+</main>
+// Quản lý máy in
     <main id="printer-settings-screen" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <h2>Cài đặt Máy in</h2>
