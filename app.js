@@ -171,7 +171,7 @@ function displayDateFromISO(iso){
 }
 async function saveAll(){ 
   try {
-    // Lưu localStorage như cũ (phòng offline)
+    // Lưu localStorage (phòng offline)
     localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); 
     localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); 
     localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); 
@@ -179,53 +179,59 @@ async function saveAll(){
     localStorage.setItem(KEY_GUEST, String(GUEST_CNT)); 
 
     // Lưu Firestore
-    await setDoc(doc(db, "pos", "menu"), { data: MENU });
-    await setDoc(doc(db, "pos", "categories"), { data: CATEGORIES });
-    await setDoc(doc(db, "pos", "tables"), { data: TABLES });
-    await setDoc(doc(db, "pos", "history"), { data: HISTORY });
-    await setDoc(doc(db, "pos", "guest"), { value: GUEST_CNT });
+    await db.collection("pos").doc("menu").set({ data: MENU });
+    await db.collection("pos").doc("categories").set({ data: CATEGORIES });
+    await db.collection("pos").doc("tables").set({ data: TABLES });
+    await db.collection("pos").doc("history").set({ data: HISTORY });
+    await db.collection("pos").doc("guest").set({ value: GUEST_CNT });
 
-    console.log("✅ Lưu Firestore thành công");
   } catch (err) {
-    console.error("❌ Lỗi lưu Firestore:", err);
+    console.error("Lỗi lưu đơn trực tuyến"); 
   }
 }
+
 function listenAll(){
-  onSnapshot(doc(db, "pos", "menu"), (snap)=>{
-    if(snap.exists()) {
-      MENU = snap.data().data;
-      renderMenuSettings();
-    }
-  });
+  try {
+    db.collection("pos").doc("menu").onSnapshot((snap)=>{
+      if(snap.exists) {
+        MENU = snap.data().data;
+        renderMenuSettings();
+      }
+    });
 
-  onSnapshot(doc(db, "pos", "categories"), (snap)=>{
-    if(snap.exists()) {
-      CATEGORIES = snap.data().data;
-      renderCategories();
-      populateCatSelect();
-    }
-  });
+    db.collection("pos").doc("categories").onSnapshot((snap)=>{
+      if(snap.exists) {
+        CATEGORIES = snap.data().data;
+        renderCategories();
+        populateCatSelect();
+      }
+    });
 
-  onSnapshot(doc(db, "pos", "tables"), (snap)=>{
-    if(snap.exists()) {
-      TABLES = snap.data().data;
-      renderTables();
-    }
-  });
+    db.collection("pos").doc("tables").onSnapshot((snap)=>{
+      if(snap.exists) {
+        TABLES = snap.data().data;
+        renderTables();
+      }
+    });
 
-  onSnapshot(doc(db, "pos", "history"), (snap)=>{
-    if(snap.exists()) {
-      HISTORY = snap.data().data;
-      renderHistory();
-    }
-  });
+    db.collection("pos").doc("history").onSnapshot((snap)=>{
+      if(snap.exists) {
+        HISTORY = snap.data().data;
+        renderHistory();
+      }
+    });
 
-  onSnapshot(doc(db, "pos", "guest"), (snap)=>{
-    if(snap.exists()) {
-      GUEST_CNT = snap.data().value;
-    }
-  });
+    db.collection("pos").doc("guest").onSnapshot((snap)=>{
+      if(snap.exists) {
+        GUEST_CNT = snap.data().value;
+      }
+    });
+    
+  } catch (err) {
+    console.error("Lỗi đồng bộ trực tuyến");
+  }
 }
+
 
 
 // render tables (sắp xếp: L = 4 cột, NT = 2 cột, T/G/N = mỗi bàn 1 hàng dọc, khác = Bàn tạm)
