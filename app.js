@@ -1,21 +1,4 @@
 // BlackTea POS v8 final - full logic with payment preview, discount, history filter and expandable history items
-// Firebase
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAv7Ba3I6E-aF-3ZPlcoabAlxynxfc1cEA",
-  authDomain: "blackteapos-9016e.firebaseapp.com",
-  projectId: "blackteapos-9016e",
-  storageBucket: "blackteapos-9016e.firebasestorage.app",
-  messagingSenderId: "133051542981",
-  appId: "1:133051542981:web:9f4937c264fa956a456fac",
-  measurementId: "G-GVRBHCSPWM"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
 let selectedTable = null;
 let isAddingMore = false;
 const KEY_MENU = 'BT8_MENU';
@@ -186,53 +169,7 @@ function displayDateFromISO(iso){
   const year = parts[0];
   return `${day}/${month}/${year}`;
 }
-async function saveAll(){ 
-  try {
-    // Lưu localStorage như cũ (phòng khi offline)
-    localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); 
-    localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); 
-    localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); 
-    localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); 
-    localStorage.setItem(KEY_GUEST, String(GUEST_CNT)); 
-
-    // Lưu Firestore
-    await setDoc(doc(db, "pos", "menu"), { data: MENU });
-    await setDoc(doc(db, "pos", "categories"), { data: CATEGORIES });
-    await setDoc(doc(db, "pos", "tables"), { data: TABLES });
-    await setDoc(doc(db, "pos", "history"), { data: HISTORY });
-    await setDoc(doc(db, "pos", "guest"), { value: GUEST_CNT });
-
-    console.log("✅ Lưu Firestore thành công");
-  } catch (err) {
-    console.error("❌ Lỗi lưu Firestore:", err);
-  }
-}
-
-async function loadAll(){ 
-  try {
-    let snap;
-
-    snap = await getDoc(doc(db, "pos", "menu"));
-    if (snap.exists()) MENU = snap.data().data;
-
-    snap = await getDoc(doc(db, "pos", "categories"));
-    if (snap.exists()) CATEGORIES = snap.data().data;
-
-    snap = await getDoc(doc(db, "pos", "tables"));
-    if (snap.exists()) TABLES = snap.data().data;
-
-    snap = await getDoc(doc(db, "pos", "history"));
-    if (snap.exists()) HISTORY = snap.data().data;
-
-    snap = await getDoc(doc(db, "pos", "guest"));
-    if (snap.exists()) GUEST_CNT = snap.data().value;
-
-    console.log("✅ Tải Firestore thành công");
-  } catch (err) {
-    console.error("❌ Lỗi load Firestore:", err);
-  }
-}
-
+function saveAll(){ localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); localStorage.setItem(KEY_GUEST, String(GUEST_CNT)); }
 
 // render tables (sắp xếp: L = 4 cột, NT = 2 cột, T/G/N = mỗi bàn 1 hàng dọc, khác = Bàn tạm)
 function renderTables(){
@@ -1092,11 +1029,5 @@ window.addEventListener('load', ()=>{
   hideOrderInfo();   // ✅ ẩn nút X và phần tiêu đề đơn
   backToTables();    // quay về màn hình chính
 });
-  loadAll().then(()=>{
-  renderTables(); 
-  renderCategories(); 
-  populateCatSelect(); 
-  renderMenuSettings(); 
-});
-
+  renderTables(); renderCategories(); populateCatSelect(); renderMenuSettings(); saveAll();
 });
