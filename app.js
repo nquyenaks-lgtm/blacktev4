@@ -172,55 +172,17 @@ function displayDateFromISO(iso){
 function saveAll(){ localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); localStorage.setItem(KEY_GUEST, String(GUEST_CNT)); }
 
 // render tables (sắp xếp: L = 4 cột, NT = 2 cột, T/G/N = mỗi bàn 1 hàng dọc, khác = Bàn tạm)
-function renderTables() {
+function renderTables(){
   const div = $('tables');
-  div.innerHTML = '<div class="small">Đang tải...</div>';
+  div.innerHTML = '';
 
-  // Lắng nghe thay đổi realtime từ Firestore
-  db.collection("orders").onSnapshot(snapshot => {
-    div.innerHTML = ''; // reset
-    if (snapshot.empty) {
-      div.innerHTML = '<div class="small">Chưa có bàn nào đang phục vụ</div>';
-      return;
-    }
+  // Chỉ lấy bàn có món
+  const activeTables = TABLES.filter(t => t.cart && t.cart.length > 0);
 
-    snapshot.forEach(doc => {
-      const t = doc.data();
-
-      // chỉ hiển thị bàn có món
-      if (!t.cart || t.cart.length === 0) return;
-
-      const card = document.createElement('div');
-      card.className = 'table-card';
-
-      const info = document.createElement('div');
-      info.className = 'table-info';
-
-      const name = document.createElement('div');
-      name.className = 'table-name';
-      name.innerText = t.tableName;
-
-      info.appendChild(name);
-
-      // tính tổng số món và tiền
-      let qty = 0, total = 0;
-      t.cart.forEach(it => { qty += it.qty; total += it.qty * it.price; });
-
-      const meta = document.createElement('div');
-      meta.className = 'table-meta';
-      meta.innerText = qty + ' món • ' + fmtV(total) + ' VND';
-      info.appendChild(meta);
-
-      card.appendChild(info);
-
-      // click vào để mở chi tiết bàn
-      card.onclick = () => openTable(t.tableId);
-
-      div.appendChild(card);
-    });
-  });
-}
-
+  if (!activeTables.length) {
+    div.innerHTML = '<div class="small">Chưa có bàn nào đang phục vụ</div>';
+    return;
+  }
 
   // Nhóm L (4 cột)
   const groupL = activeTables.filter(t => t.name.startsWith('L'))
@@ -609,33 +571,29 @@ function cancelOrder(){ if(!currentTable) return; currentTable.cart=[]; renderMe
 
 function saveOrder() {
   if (!currentTable) return;
-  if (!currentTable.cart || currentTable.cart.length === 0) return;
+  if (!currentTable.cart || currentTable.cart.length === 0) {
+    // không lưu nếu không có món
+    return;
+  }
 
-  // đánh dấu món đã lock
+  // Đánh dấu món đã được lock / lưu baseQty nếu chưa có
   currentTable.cart = currentTable.cart.map(it => ({
     ...it,
     locked: true,
     baseQty: (typeof it.baseQty === 'number' && it.baseQty > 0) ? it.baseQty : it.qty
   }));
 
-  const orderData = {
-    tableId: currentTable.id,
-    tableName: currentTable.name,
-    cart: currentTable.cart,
-    time: new Date().toISOString(),
-    total: currentTable.cart.reduce((sum, i) => sum + i.price * i.qty, 0)
-  };
+  const idx = TABLES.findIndex(t => t.id === currentTable.id);
+  if (idx >= 0) {
+    // cập nhật bàn đã lưu
+    TABLES[idx] = { ...currentTable, _isDraft: false };
+  } else {
+    // thêm bàn mới (từ draft -> lưu)
+    TABLES.push({ ...currentTable, _isDraft: false });
+  }
 
-  // 🔥 lưu vào Firestore (dùng tableId làm documentId để tránh trùng lặp)
-  db.collection("orders").doc(String(currentTable.id)).set(orderData)
-    .then(() => {
-      console.log("✅ Order saved for table:", currentTable.name);
-      backToTables();
-    })
-    .catch(error => {
-      console.error("❌ Error saving order:", error);
-    });
-}
+  saveAll && saveAll();   // hàm lưu localStorage (giữ nguyên)
+  renderTables && renderTables();
 
   // ẩn order-info + hiện lại header buttons + ẩn X
   hideOrderInfo();
@@ -744,21 +702,18 @@ function confirmPayment() {
 
   const { subtotal, discount, final } = updateFinalTotal(); // dùng chung parser
 
-  const rec = {
-  id: Date.now(),
-  table: currentTable.name,
-  items: JSON.parse(JSON.stringify(currentTable.cart)),
-  subtotal,
-  discount: Math.round(discount),
-  total: final,
-  time: new Date().toLocaleString('vi-VN'),
-  iso: isoDateKey(new Date())
-};
+  HISTORY.push({
+    id: Date.now(),
+    table: currentTable.name,
+    items: JSON.parse(JSON.stringify(currentTable.cart)),
+    subtotal,
+    discount: Math.round(discount),
+    total: final,
+    time: new Date().toLocaleString(),
+    iso: isoDateKey(new Date())
+  });
 
-// lưu Firestore
-db.collection("history").add(rec)
-  .then(() => console.log("✅ History saved:", rec))
-  .catch(err => console.error("❌ Error saving history:", err));
+  localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY));
 
   currentTable.cart = [];
   saveAll();
