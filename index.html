@@ -310,6 +310,28 @@
     <button onclick="closeCustomAlert()">Xác nhận</button>
   </div>
 </div>
+<!-- Firebase App (luôn cần thiết) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+<!-- Nếu cần Analytics -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js"></script>
+<!-- Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAv7Ba3I6E-aF-3ZPlcoabAlxynxfc1cEA",
+    authDomain: "blackteapos-9016e.firebaseapp.com",
+    projectId: "blackteapos-9016e",
+    storageBucket: "blackteapos-9016e.appspot.com", <!-- sửa lại -->
+    messagingSenderId: "133051542981",
+    appId: "1:133051542981:web:9f4937c264fa956a456fac",
+    measurementId: "G-GVRBHCSPWM"
+  };
+
+  // Khởi tạo Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
 
 </body>
 </html>
