@@ -805,6 +805,10 @@ function printFinalBill(rec){
   }, 500);
 }
 
+// Settings screens
+function openSettings(){ $('table-screen').style.display='none'; $('menu-screen').style.display='none'; $('history-screen').style.display='none'; $('settings-screen').style.display='block'; }
+function openMenuSettings(){ $('settings-screen').style.display='none'; $('menu-settings-screen').style.display='block'; renderCategoriesList(); renderMenuSettings(); populateCatSelect(); }
+function openPrinterSettings(){ $('settings-screen').style.display='none'; $('printer-settings-screen').style.display='block'; populatePrinterSettings(); }
 
 // menu settings
 function renderCategoriesList(){ const ul=$('categories-list'); ul.innerHTML=''; CATEGORIES.forEach((c,i)=>{ const li=document.createElement('li'); li.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center"><div>'+c+'</div>' + (i>0? '<div><button class="btn btn-secondary" onclick="deleteCategory('+i+')">Xóa</button></div>':'') + '</div>'; ul.appendChild(li); }); }
@@ -1047,70 +1051,10 @@ function openTableModal() {
 
   document.body.appendChild(list);
 }
-function syncData() {
-  // Reload toàn bộ app để lấy code + dữ liệu mới nhất
-  location.reload(true);
-}
-// Phần cài đặt
-function openHome(){
-  hideAllScreens();
-  $('home-screen').style.display = 'block';
 
-  // Tiêu đề về lại BlackTea
-  $('brand').innerText = 'BlackTea';
 
-  // Góc phải là nút ⚙️ mở Cài đặt
-  $('header-buttons').innerHTML = `
-    <span class="icon-btn" onclick="openHistory()" title="Lịch sử">🧾</span>
-    <span class="icon-btn" onclick="openSettings()" title="Cài đặt">⚙️</span>
-  `;
-}
 
-function openSettings(){
-  hideAllScreens();
-  $('settings-screen').style.display = 'block';
 
-  // Đổi tiêu đề trên header thành "BlackTea | Cài đặt"
-  $('brand').innerText = 'BlackTea | Cài đặt';
-
-  // Góc phải hiện nút ❌ để quay về home
-  $('header-buttons').innerHTML = `
-    <button id="backBtn" onclick="openHome()">❌</button>
-  `;
-}
-
-function openMenuSettings(){
-  // Ẩn tất cả trước
-  $('settings-screen').style.display = 'none';
-  $('category-settings-screen').style.display = 'none';
-  $('item-settings-screen').style.display = 'none';
-  $('printer-settings-screen').style.display = 'none';
-
-  // Hiện màn hình cài đặt menu
-  $('menu-settings-screen').style.display = 'block';
-}
-
-function openCategorySettings(){
-  // Ẩn tất cả trước
-  $('menu-settings-screen').style.display = 'none';
-  $('item-settings-screen').style.display = 'none';
-  $('settings-screen').style.display = 'none';
-
-  // Hiện quản lý danh mục
-  $('category-settings-screen').style.display = 'block';
-  renderCategoriesList();
-}
-
-function openItemSettings(){
-  // Ẩn tất cả trước
-  $('menu-settings-screen').style.display = 'none';
-  $('category-settings-screen').style.display = 'none';
-  $('settings-screen').style.display = 'none';
-
-  // Hiện quản lý món
-  $('item-settings-screen').style.display = 'block';
-  renderMenuSettings();
-}
 // init
 window.addEventListener('load', () => {
   if($('guest-btn')) $('guest-btn').addEventListener('click', addGuest);
