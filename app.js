@@ -1051,6 +1051,16 @@ function openTableModal() {
 
   document.body.appendChild(list);
 }
+function syncData(){
+  // ép gọi lại render
+  renderCategoriesList && renderCategoriesList();
+  renderMenuSettings && renderMenuSettings();
+  renderCategories && renderCategories();
+  renderMenuList && renderMenuList();
+  renderTables && renderTables();
+  renderHistory && renderHistory();
+  showCustomAlert("Đã đồng bộ dữ liệu mới nhất ✅");
+}
 // Phần cài đặt
 
 function openMenuSettings(){
