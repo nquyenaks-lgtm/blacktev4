@@ -15,7 +15,7 @@ const FIXED_TABLES = [
   "T4","G4","N4"
 ];
 
-let MENU = JSON.parse(localStorage.getItem(KEY_MENU)) || [
+let MENU =  [
   // --- Cà phê ---
   { id: 1, name: "Cà phê sữa nóng (Pha phin)", price: 15000, cat: "Cà phê" },
   { id: 2, name: "Cà phê sữa đá (Pha phin)", price: 15000, cat: "Cà phê" },
@@ -110,7 +110,7 @@ let MENU = JSON.parse(localStorage.getItem(KEY_MENU)) || [
   { id: 78, name: "Kem lăng dừa", price: 15000, cat: "Topping" }
 ];
 
-let CATEGORIES = JSON.parse(localStorage.getItem(KEY_CATS)) || ["Cà phê","Trà sữa","Sinh tố","Sữa chua","Giải khát","Trà & Nước ép","Matcha","Ăn vặt","Topping"];
+let CATEGORIES = ["Cà phê","Trà sữa","Sinh tố","Sữa chua","Giải khát","Trà & Nước ép","Matcha","Ăn vặt","Topping"];
 let TABLES = [];
 
 // ✅ Migration: đảm bảo mỗi item trong cart có locked và baseQty
