@@ -491,21 +491,6 @@ function backToTables() {
 }
 
 
-
-  // 👇 --- Phần UI bạn đang có (giữ nguyên hoàn toàn) ---
-  $('table-screen').style.display = 'block';
-  $('menu-screen').style.display = 'none';
-  $('settings-screen').style.display = 'none';
-  $('menu-settings-screen').style.display = 'none';
-  $('printer-settings-screen').style.display = 'none';
-  $('history-screen').style.display = 'none';
-  $('payment-screen').style.display = 'none';
-
-  // 👉 trả header về mặc định
-  $('header-buttons').style.display = 'flex';  
-  $('order-info').classList.add('hidden');
-}
-
 function goBack(){
   if (!currentTable) {
     hideOrderInfo();
