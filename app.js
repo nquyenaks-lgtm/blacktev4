@@ -172,17 +172,55 @@ function displayDateFromISO(iso){
 function saveAll(){ localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); localStorage.setItem(KEY_GUEST, String(GUEST_CNT)); }
 
 // render tables (sắp xếp: L = 4 cột, NT = 2 cột, T/G/N = mỗi bàn 1 hàng dọc, khác = Bàn tạm)
-function renderTables(){
+function renderTables() {
   const div = $('tables');
-  div.innerHTML = '';
+  div.innerHTML = '<div class="small">Đang tải...</div>';
 
-  // Chỉ lấy bàn có món
-  const activeTables = TABLES.filter(t => t.cart && t.cart.length > 0);
+  // Lắng nghe thay đổi realtime từ Firestore
+  db.collection("orders").onSnapshot(snapshot => {
+    div.innerHTML = ''; // reset
+    if (snapshot.empty) {
+      div.innerHTML = '<div class="small">Chưa có bàn nào đang phục vụ</div>';
+      return;
+    }
 
-  if (!activeTables.length) {
-    div.innerHTML = '<div class="small">Chưa có bàn nào đang phục vụ</div>';
-    return;
-  }
+    snapshot.forEach(doc => {
+      const t = doc.data();
+
+      // chỉ hiển thị bàn có món
+      if (!t.cart || t.cart.length === 0) return;
+
+      const card = document.createElement('div');
+      card.className = 'table-card';
+
+      const info = document.createElement('div');
+      info.className = 'table-info';
+
+      const name = document.createElement('div');
+      name.className = 'table-name';
+      name.innerText = t.tableName;
+
+      info.appendChild(name);
+
+      // tính tổng số món và tiền
+      let qty = 0, total = 0;
+      t.cart.forEach(it => { qty += it.qty; total += it.qty * it.price; });
+
+      const meta = document.createElement('div');
+      meta.className = 'table-meta';
+      meta.innerText = qty + ' món • ' + fmtV(total) + ' VND';
+      info.appendChild(meta);
+
+      card.appendChild(info);
+
+      // click vào để mở chi tiết bàn
+      card.onclick = () => openTable(t.tableId);
+
+      div.appendChild(card);
+    });
+  });
+}
+
 
   // Nhóm L (4 cột)
   const groupL = activeTables.filter(t => t.name.startsWith('L'))
