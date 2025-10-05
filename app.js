@@ -736,12 +736,18 @@ function confirmPayment() {
     iso: isoDateKey(new Date())
   });
 
+  // Nếu là "Khách mang đi" thì xoá hẳn bàn khỏi TABLES
+if (currentTable.name.startsWith("Khách mang đi")) {
+  TABLES = TABLES.filter(t => t.id !== currentTable.id);
+} else {
   currentTable.cart = [];
-  saveAll();
-  renderTables();
-  hideOrderInfo();
-  backToTables();
-  showPopup("Xuất đơn hàng thành công");
+}
+
+saveAll();
+renderTables();
+hideOrderInfo();
+backToTables();
+showPopup("Xuất đơn hàng thành công");
 }
 
 function hideOrderInfo(){
