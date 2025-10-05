@@ -758,8 +758,6 @@ function confirmPayment() {
     iso: isoDateKey(new Date())
   });
 
-  localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY));
-
   currentTable.cart = [];
   saveAll();
   renderTables();
@@ -767,6 +765,7 @@ function confirmPayment() {
   backToTables();
   showPopup("Xuất đơn hàng thành công");
 }
+
 function hideOrderInfo(){
   if ($('header-buttons')) $('header-buttons').style.display = 'flex';
   if ($('order-info')) $('order-info').classList.add('hidden');
