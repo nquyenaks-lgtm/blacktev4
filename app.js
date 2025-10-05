@@ -1051,15 +1051,9 @@ function openTableModal() {
 
   document.body.appendChild(list);
 }
-function syncData(){
-  // ép gọi lại render
-  renderCategoriesList && renderCategoriesList();
-  renderMenuSettings && renderMenuSettings();
-  renderCategories && renderCategories();
-  renderMenuList && renderMenuList();
-  renderTables && renderTables();
-  renderHistory && renderHistory();
-  showCustomAlert("Đã đồng bộ dữ liệu mới nhất ✅");
+function syncData() {
+  // Reload toàn bộ app để lấy code + dữ liệu mới nhất
+  location.reload(true);
 }
 // Phần cài đặt
 
