@@ -53,27 +53,22 @@
 <body>
   <div class="app">
     
-<header style="
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px 16px;
-  background:#2c3e50;
-  color:#fff;
-  box-shadow:0 2px 6px rgba(0,0,0,0.15);
-">
-  <h1 id="brand" style="margin:0; font-size:20px; font-weight:700; cursor:pointer;">
-    BlackTea POS
-  </h1>
-  <div style="display:flex; gap:12px; align-items:center;">
-    <button class="btn btn-light" onclick="openHistory()" title="Lịch sử"
-      style="background:#fff; color:#2c3e50; border-radius:6px; padding:6px 10px;">
-      📜
-    </button>
-    <button class="btn btn-light" onclick="openSettings()" title="Cài đặt"
-      style="background:#fff; color:#2c3e50; border-radius:6px; padding:6px 10px;">
-      ⚙️
-    </button>
+<header>
+  <!-- Bên trái: logo + tên bàn -->
+  <div class="header-left">
+    <h1 id="brand">BlackTea</h1>
+    <div id="order-info" class="hidden">
+      <span id="orderTitle"></span>
+    </div>
+  </div>
+
+  <!-- Bên phải: icon lịch sử, cài đặt (trang chính) + nút X (order) -->
+  <div class="header-right">
+    <div class="header-icons" id="header-buttons">
+      <span class="icon-btn" onclick="openHistory()" title="Lịch sử">🧾</span>
+      <span class="icon-btn" onclick="openSettings()" title="Cài đặt">⚙️</span>
+    </div>
+    <button id="backBtn" class="hidden" onclick="goBack()">❌</button>
   </div>
 </header>
 
@@ -89,16 +84,15 @@
   </button>
 </div>
 
-<h2 style="margin:16px 0 12px; font-size:16px; font-weight:600; color:#555;">
+<div class="section-bar">
   📋 Bàn đang phục vụ
-</h2>
+</div>
       <div id="tables" class="table-grid"></div>
     </main>
 
     <main id="menu-screen" style="display:none">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <button class="btn btn-light" onclick="backToTables()">← Quay lại</button>
-        <h2 id="table-title" style="margin:0"></h2>
+     <h2 id="table-title"></h2>
       </div>
 
       <div id="category-bar" class="category-bar"></div>
@@ -134,8 +128,8 @@
   <!-- Form chiết khấu + tổng -->
   <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px; max-width:520px;">
     <div style="display:flex; align-items:center; justify-content:flex-start; gap:12px;">
-      <label for="discount" style="font-weight:700; min-width:86px; margin-bottom:0;">Chiết khấu:</label>
-      <input id="discount" type="number" value="0"
+      <label for="discount-input" style="font-weight:700; min-width:86px; margin-bottom:0;">Chiết khấu:</label>
+      <input id="discount-input" type="number" value="0"
              style="width:140px; text-align:right; padding:8px; border-radius:8px; border:1px solid #ccc;"
              placeholder="Nhập chiết khấu" />
     </div>
