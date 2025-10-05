@@ -1063,26 +1063,52 @@ function syncData(){
 }
 // Phần cài đặt
 
+function openSettings(){
+  // Ẩn tất cả màn hình
+  $('table-screen').style.display = 'none';
+  $('menu-screen').style.display = 'none';
+  $('history-screen').style.display = 'none';
+  $('menu-settings-screen').style.display = 'none';
+  $('category-settings-screen').style.display = 'none';
+  $('item-settings-screen').style.display = 'none';
+  $('printer-settings-screen').style.display = 'none';
+
+  // Chỉ hiện màn hình cài đặt
+  $('settings-screen').style.display = 'block';
+}
+
 function openMenuSettings(){
-  $('settings-screen').style.display='none';
-  $('menu-settings-screen').style.display='block';
-  $('category-settings-screen').style.display='none';
-  $('item-settings-screen').style.display='none';
+  // Ẩn tất cả trước
+  $('settings-screen').style.display = 'none';
+  $('category-settings-screen').style.display = 'none';
+  $('item-settings-screen').style.display = 'none';
+  $('printer-settings-screen').style.display = 'none';
+
+  // Hiện màn hình cài đặt menu
+  $('menu-settings-screen').style.display = 'block';
 }
 
 function openCategorySettings(){
-  $('menu-settings-screen').style.display='none';
-  $('category-settings-screen').style.display='block';
+  // Ẩn tất cả trước
+  $('menu-settings-screen').style.display = 'none';
+  $('item-settings-screen').style.display = 'none';
+  $('settings-screen').style.display = 'none';
+
+  // Hiện quản lý danh mục
+  $('category-settings-screen').style.display = 'block';
   renderCategoriesList();
 }
 
 function openItemSettings(){
-  $('menu-settings-screen').style.display='none';
-  $('item-settings-screen').style.display='block';
-  renderMenuSettings();
-  populateCatSelect();
-}
+  // Ẩn tất cả trước
+  $('menu-settings-screen').style.display = 'none';
+  $('category-settings-screen').style.display = 'none';
+  $('settings-screen').style.display = 'none';
 
+  // Hiện quản lý món
+  $('item-settings-screen').style.display = 'block';
+  renderMenuSettings();
+}
 // init
 window.addEventListener('load', () => {
   if($('guest-btn')) $('guest-btn').addEventListener('click', addGuest);
