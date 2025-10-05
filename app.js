@@ -343,14 +343,6 @@ function makeTableCard(t){
 }
 // add guest
 function addGuest() {
-  const today = new Date().toISOString().split('T')[0];
-  let savedData = localStorage.getItem('LAST_TAKEAWAY_INFO');
-  let lastInfo = savedData ? JSON.parse(savedData) : { date: today, num: 0 };
-
-  if (lastInfo.date !== today) {
-    lastInfo = { date: today, num: 0 };
-  }
-
   // Xóa bàn trống
   const emptyGuests = TABLES.filter(
     t => t.name.startsWith('Khách mang đi') && (!t.cart || t.cart.length === 0)
@@ -360,14 +352,14 @@ function addGuest() {
     saveAll();
   }
 
-  // Tìm số tiếp theo
+  // Tìm số tiếp theo dựa vào TABLES trên Firestore
   const takeawayTables = TABLES.filter(t => t.name.startsWith('Khách mang đi'));
   const maxNum = takeawayTables.reduce((max, t) => {
     const m = t.name.match(/\d+/);
     return m ? Math.max(max, parseInt(m[0])) : max;
   }, 0);
 
-  const nextNum = Math.max(maxNum, lastInfo.num) + 1;
+  const nextNum = maxNum + 1;
 
   const id = Date.now();
   const name = 'Khách mang đi ' + nextNum;
@@ -381,6 +373,7 @@ function addGuest() {
   openTable(currentTable.id);
   addMore(); // mở luôn menu order
 }
+
 
 function addGuestVisit(){
   GUEST_CNT += 1;
