@@ -208,6 +208,31 @@ async function saveAll(){
   }
 }
 
+async function loadAll(){ 
+  try {
+    let snap;
+
+    snap = await getDoc(doc(db, "pos", "menu"));
+    if (snap.exists()) MENU = snap.data().data;
+
+    snap = await getDoc(doc(db, "pos", "categories"));
+    if (snap.exists()) CATEGORIES = snap.data().data;
+
+    snap = await getDoc(doc(db, "pos", "tables"));
+    if (snap.exists()) TABLES = snap.data().data;
+
+    snap = await getDoc(doc(db, "pos", "history"));
+    if (snap.exists()) HISTORY = snap.data().data;
+
+    snap = await getDoc(doc(db, "pos", "guest"));
+    if (snap.exists()) GUEST_CNT = snap.data().value;
+
+    console.log("✅ Tải Firestore thành công");
+  } catch (err) {
+    console.error("❌ Lỗi load Firestore:", err);
+  }
+}
+
 
 // render tables (sắp xếp: L = 4 cột, NT = 2 cột, T/G/N = mỗi bàn 1 hàng dọc, khác = Bàn tạm)
 function renderTables(){
