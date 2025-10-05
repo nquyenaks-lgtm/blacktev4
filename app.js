@@ -1051,9 +1051,27 @@ function openTableModal() {
 
   document.body.appendChild(list);
 }
+// Phần cài đặt
 
+function openMenuSettings(){
+  $('settings-screen').style.display='none';
+  $('menu-settings-screen').style.display='block';
+  $('category-settings-screen').style.display='none';
+  $('item-settings-screen').style.display='none';
+}
 
+function openCategorySettings(){
+  $('menu-settings-screen').style.display='none';
+  $('category-settings-screen').style.display='block';
+  renderCategoriesList();
+}
 
+function openItemSettings(){
+  $('menu-settings-screen').style.display='none';
+  $('item-settings-screen').style.display='block';
+  renderMenuSettings();
+  populateCatSelect();
+}
 
 // init
 window.addEventListener('load', () => {
