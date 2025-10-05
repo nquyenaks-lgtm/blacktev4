@@ -1050,7 +1050,7 @@ function openTableModal() {
 
 
 // init
-window.addEventListener('load', ()=>{
+window.addEventListener('load', () => {
   if($('guest-btn')) $('guest-btn').addEventListener('click', addGuest);
   if($('guest-visit-btn')) $('guest-visit-btn').addEventListener('click', openTableModal);
   if($('cancel-order-btn')) $('cancel-order-btn').addEventListener('click', cancelOrder);
@@ -1058,14 +1058,13 @@ window.addEventListener('load', ()=>{
   if($('addmore-btn')) $('addmore-btn').addEventListener('click', addMore);
   if($('pay-btn')) $('pay-btn').addEventListener('click', payTable);
   if($('history-date')) $('history-date').addEventListener('change', ()=> renderHistory());
-  const brand = document.getElementById('brand'); if (brand) brand.addEventListener('click', ()=>{
-  hideOrderInfo();   // ✅ ẩn nút X và phần tiêu đề đơn
-  backToTables();    // quay về màn hình chính
-});
-  listenAll();  // bật realtime
-renderTables(); 
-renderCategories(); 
-populateCatSelect(); 
-renderMenuSettings();
 
+  const brand = document.getElementById('brand');
+  if (brand) brand.addEventListener('click', ()=>{
+    hideOrderInfo();   // ẩn nút X và phần tiêu đề đơn
+    backToTables();    // quay về màn hình chính
+  });
+
+  // 🔥 chỉ cần gọi realtime, không render thủ công ngay khi load
+  listenAll();  
 });
