@@ -1051,9 +1051,42 @@ function openTableModal() {
 
   document.body.appendChild(list);
 }
-function syncData() {
-  // Reload toàn bộ app để lấy code + dữ liệu mới nhất
-  location.reload(true);
+async function syncData() {
+  try {
+    // 🧹 Xóa cache cũ để đảm bảo dữ liệu mới
+    localStorage.removeItem(KEY_MENU);
+    localStorage.removeItem(KEY_CATS);
+    localStorage.removeItem(KEY_TABLES);
+    localStorage.removeItem(KEY_HISTORY);
+    localStorage.removeItem(KEY_GUEST);
+
+    // 🔄 Lấy dữ liệu mới từ Firestore
+    const docs = ["menu","categories","tables","history","guest"];
+    for (let d of docs) {
+      const snap = await db.collection("pos").doc(d).get();
+      if (snap.exists) {
+        const data = snap.data();
+        switch(d){
+          case "menu": MENU = data.data || []; localStorage.setItem(KEY_MENU, JSON.stringify(MENU)); break;
+          case "categories": CATEGORIES = data.data || []; localStorage.setItem(KEY_CATS, JSON.stringify(CATEGORIES)); break;
+          case "tables": TABLES = data.data || []; localStorage.setItem(KEY_TABLES, JSON.stringify(TABLES)); break;
+          case "history": HISTORY = data.data || []; localStorage.setItem(KEY_HISTORY, JSON.stringify(HISTORY)); break;
+          case "guest": GUEST_CNT = data.value || 0; localStorage.setItem(KEY_GUEST, GUEST_CNT); break;
+        }
+      }
+    }
+
+    // 🔁 Render lại giao diện
+    renderTables();
+    renderCategories();
+    renderMenuList();
+    renderHistory();
+
+    showCustomAlert("Đồng bộ dữ liệu thành công!");
+  } catch (err) {
+    console.error("Lỗi đồng bộ:", err);
+    showCustomAlert("Không thể đồng bộ, vui lòng thử lại.");
+  }
 }
 // Phần cài đặt
 
