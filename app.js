@@ -1051,10 +1051,68 @@ function openTableModal() {
 
   document.body.appendChild(list);
 }
+function syncData() {
+  // Reload toàn bộ app để lấy code + dữ liệu mới nhất
+  location.reload(true);
+}
+// Phần cài đặt
+function openHome(){
+  hideAllScreens();
+  $('home-screen').style.display = 'block';
 
+  // Tiêu đề về lại BlackTea
+  $('app-title').innerText = 'BlackTea';
 
+  // Góc phải là nút ⚙️ mở Cài đặt
+  $('header-btn').innerHTML = `
+    <button class="btn btn-icon" onclick="openSettings()">⚙️</button>
+  `;
+}
+function openSettings(){
+  hideAllScreens();
+  $('settings-screen').style.display = 'block';
 
+  // Đổi tiêu đề trên header thành "BlackTea | Cài đặt"
+  $('app-title').innerText = 'BlackTea | Cài đặt';
 
+  // Góc phải hiện nút ❌ để quay về home
+  $('header-btn').innerHTML = `
+    <button class="btn btn-icon" onclick="openHome()">❌</button>
+  `;
+}
+
+function openMenuSettings(){
+  // Ẩn tất cả trước
+  $('settings-screen').style.display = 'none';
+  $('category-settings-screen').style.display = 'none';
+  $('item-settings-screen').style.display = 'none';
+  $('printer-settings-screen').style.display = 'none';
+
+  // Hiện màn hình cài đặt menu
+  $('menu-settings-screen').style.display = 'block';
+}
+
+function openCategorySettings(){
+  // Ẩn tất cả trước
+  $('menu-settings-screen').style.display = 'none';
+  $('item-settings-screen').style.display = 'none';
+  $('settings-screen').style.display = 'none';
+
+  // Hiện quản lý danh mục
+  $('category-settings-screen').style.display = 'block';
+  renderCategoriesList();
+}
+
+function openItemSettings(){
+  // Ẩn tất cả trước
+  $('menu-settings-screen').style.display = 'none';
+  $('category-settings-screen').style.display = 'none';
+  $('settings-screen').style.display = 'none';
+
+  // Hiện quản lý món
+  $('item-settings-screen').style.display = 'block';
+  renderMenuSettings();
+}
 // init
 window.addEventListener('load', () => {
   if($('guest-btn')) $('guest-btn').addEventListener('click', addGuest);
