@@ -1,4 +1,5 @@
 // BlackTea POS v8 final - full logic with payment preview, discount, history filter and expandable history items
+let syncingFromFirestore = false;
 let isAddingMore = false;
 const KEY_MENU = 'BT8_MENU';
 const KEY_CATS = 'BT8_CATS';
