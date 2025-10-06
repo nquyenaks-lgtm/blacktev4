@@ -14,7 +14,6 @@ const FIXED_TABLES = [
   "T3","G3","N3",
   "T4","G4","N4"
 ];
-
 let MENU =  [
   // --- Cà phê --
   { id: 1, name: "Cà phê máy đen nóng", price: 15000, cat: "Cà phê" },
