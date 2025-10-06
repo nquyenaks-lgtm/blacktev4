@@ -17,88 +17,156 @@ const FIXED_TABLES = [
 
 let MENU =  [
   // --- Cà phê ---
-  { id: 1, name: "Cà phê sữa nóng (Pha phin)", price: 15000, cat: "Cà phê" },
-  { id: 2, name: "Cà phê sữa đá (Pha phin)", price: 15000, cat: "Cà phê" },
-  { id: 3, name: "Cà phê đen nóng (Pha phin)", price: 15000, cat: "Cà phê" },
-  { id: 4, name: "Cà phê đen đá (Pha phin)", price: 15000, cat: "Cà phê" },
-  { id: 5, name: "Cà phê sữa nóng (Pha máy)", price: 15000, cat: "Cà phê" },
-  { id: 6, name: "Cà phê sữa đá (Pha máy)", price: 15000, cat: "Cà phê" },
-  { id: 7, name: "Cà phê đen nóng (Pha máy)", price: 15000, cat: "Cà phê" },
-  { id: 8, name: "Cà phê đen đá (Pha máy)", price: 15000, cat: "Cà phê" },
+  { id: 1, name: "Cà phê máy đen nóng", price: 15000, cat: "Cà phê" },
+  { id: 2, name: "Cà phê máy sữa nóng", price: 15000, cat: "Cà phê" },
+  { id: 3, name: "Cà phê đen đá máy", price: 15000, cat: "Cà phê" },
+  { id: 4, name: "Cà phê sữa đá máy", price: 15000, cat: "Cà phê" },
+  { id: 5, name: "Cà phê pha phin đen nóng", price: 15000, cat: "Cà phê" },
+  { id: 6, name: "Cà phê phin sữa nóng", price: 15000, cat: "Cà phê" },
+  { id: 7, name: "Cà phê phin đen đá", price: 15000, cat: "Cà phê" },
+  { id: 8, name: "Cà phê phin sữa đá", price: 15000, cat: "Cà phê" },
   { id: 9, name: "Cà phê Sài Gòn", price: 18000, cat: "Cà phê" },
-  { id: 10, name: "Bạc xỉu", price: 20000, cat: "Cà phê" },
+  { id: 10, name: "Cà phê kem muối", price: 20000, cat: "Cà phê" },
   { id: 11, name: "Cà phê kem trứng", price: 20000, cat: "Cà phê" },
   { id: 12, name: "Cà phê cốt dừa", price: 20000, cat: "Cà phê" },
-  { id: 13, name: "Cacao nóng", price: 20000, cat: "Cà phê" },
-  { id: 14, name: "Cacao đá", price: 20000, cat: "Cà phê" },
-
-  // --- Trà sữa (M/L) ---
-  { id: 15, name: "Trà sữa truyền thống (Size L)", price: 20000, cat: "Trà sữa" },
-  { id: 16, name: "Trà sữa khoai môn (Size M)", price: 20000, cat: "Trà sữa" },
-  { id: 17, name: "Trà sữa khoai môn (Size L)", price: 25000, cat: "Trà sữa" },
-  { id: 18, name: "Trà sữa socola (Size M)", price: 20000, cat: "Trà sữa" },
-  { id: 19, name: "Trà sữa socola (Size L)", price: 25000, cat: "Trà sữa" },
-  { id: 20, name: "Chân châu đường đen (Size M)", price: 20000, cat: "Trà sữa" },
-  { id: 21, name: "Chân châu đường đen (Size L)", price: 25000, cat: "Trà sữa" },
-
-  // --- Sinh tố ---
-  { id: 35, name: "Sinh tố Dứa", price: 25000, cat: "Sinh tố" },
-  { id: 36, name: "Sinh tố Dâu", price: 25000, cat: "Sinh tố" },
-  { id: 37, name: "Sinh tố Nho", price: 25000, cat: "Sinh tố" },
-  { id: 38, name: "Sinh tố Kiwi", price: 25000, cat: "Sinh tố" },
-  { id: 39, name: "Sinh tố Việt quất", price: 25000, cat: "Sinh tố" },
-  { id: 40, name: "Sinh tố Xoài", price: 25000, cat: "Sinh tố" },
-
-  // --- Sữa chua ---
-  { id: 41, name: "Sữa chua thuần khiết", price: 20000, cat: "Sữa chua" },
-  { id: 42, name: "Sữa chua Việt quất", price: 25000, cat: "Sữa chua" },
-  { id: 43, name: "Sữa chua Nho", price: 25000, cat: "Sữa chua" },
-  { id: 44, name: "Sữa chua Dâu", price: 25000, cat: "Sữa chua" },
-  { id: 45, name: "Sữa chua Kiwi", price: 25000, cat: "Sữa chua" },
-  { id: 46, name: "Sữa chua Xoài", price: 25000, cat: "Sữa chua" },
-
-  // --- Giải khát ---
-  { id: 47, name: "Bò húc", price: 18000, cat: "Giải khát" },
-  { id: 48, name: "Nước các loại", price: 15000, cat: "Giải khát" },
-  { id: 49, name: "Soda gum", price: 25000, cat: "Giải khát" },
-  { id: 50, name: "Cocktail", price: 15000, cat: "Giải khát" },
-  { id: 51, name: "Chanh đá", price: 15000, cat: "Giải khát" },
-  { id: 52, name: "Chanh muối", price: 15000, cat: "Giải khát" },
-
-  // --- Trà & Nước ép ---
-  { id: 53, name: "Trà gừng", price: 15000, cat: "Trà & Nước ép" },
-  { id: 54, name: "Trà Lipton ngũ sắc", price: 20000, cat: "Trà & Nước ép" },
-  { id: 55, name: "Trà thảo mộc", price: 25000, cat: "Trà & Nước ép" },
-  { id: 56, name: "Trà đào (Size M)", price: 15000, cat: "Trà & Nước ép" },
-  { id: 57, name: "Trà đào (Size L)", price: 20000, cat: "Trà & Nước ép" },
-  { id: 58, name: "Rau má đậu xanh (Size M)", price: 15000, cat: "Trà & Nước ép" },
-  { id: 59, name: "Rau má đậu xanh (Size L)", price: 20000, cat: "Trà & Nước ép" },
-  { id: 60, name: "Đậu xanh cốt dừa (Size M)", price: 20000, cat: "Trà & Nước ép" },
-  { id: 61, name: "Đậu xanh cốt dừa (Size L)", price: 25000, cat: "Trà & Nước ép" },
-  { id: 62, name: "Nước ép cà rốt ", price: 25000, cat: "Trà & Nước ép" },
-  { id: 63, name: "Nước ép cam", price: 25000, cat: "Trà & Nước ép" },
-  { id: 64, name: "Nước ép táo", price: 25000, cat: "Trà & Nước ép" },
-  { id: 65, name: "Nước ép cam + cà rốt ", price: 25000, cat: "Trà & Nước ép" },
-  { id: 66, name: "Nước ép cam + dừa", price: 25000, cat: "Trà & Nước ép" },
-  { id: 67, name: "Nước ép cà rốt + dừa", price: 25000, cat: "Trà & Nước ép" },
-  // --- Matcha ---
-  { id: 68, name: "Matcha sữa xoài ", price: 25000, cat: "Matcha" },
-  { id: 69, name: "Matcha khoai môn", price: 25000, cat: "Matcha" },
-  { id: 70, name: "Matcha sữa dừa", price: 25000, cat: "Matcha" },
-  // --- Ăn vặt ---
-  { id: 71, name: "Bánh tráng ruốc nhỏ ", price: 17000, cat: "Ăn vặt" },
-  { id: 72, name: "Bánh tráng ruốc lớn", price: 30000, cat: "Ăn vặt" },
-  { id: 73, name: "Bánh tráng chấm", price: 15000, cat: "Ăn vặt" },
-  // --- Topping ---
-  { id: 74, name: "Thêm topping", price: 5000, cat: "Topping" },
-  { id: 75, name: "Kem cheese", price: 5000, cat: "Topping" },
-  { id: 76, name: "Trứng nướng", price: 5000, cat: "Topping" },
-  { id: 77, name: "Kem lăng", price: 5000, cat: "Topping" },
-  { id: 78, name: "Kem lăng dừa", price: 15000, cat: "Topping" }
+  { id: 13, name: "Bạc xỉu đá", price: 20000, cat: "Cà phê" },
+  { id: 14, name: "Ca cao đá", price: 20000, cat: "Cà phê" },
+  // --- Trà Nóng ---
+  { id: 15, name: "Trà gừng", price: 15000, cat: "Trà nóng" },
+  { id: 16, name: "Trà cam quế", price: 15000, cat: "Trà nóng" },
+  { id: 17, name: "Cacao nóng", price: 20000, cat: "Trà nóng" },
+  { id: 18, name: "Cacao chuối", price: 20000, cat: "Trà nóng" },
+  { id: 19, name: "Bạc xỉu nóng", price: 20000, cat: "Trà nóng" },
+  { id: 20, name: "Trà lipton ngũ sắc", price: 20000, cat: "Trà nóng" },
+  { id: 21, name: "Trà đào cam quế", price: 20000, cat: "Trà nóng" },
+  { id: 22, name: "Trà cúc long nhãn", price: 20000, cat: "Trà nóng" },
+  { id: 23, name: "Trà la hán sen vàng", price: 20000, cat: "Trà nóng" },
+  { id: 24, name: "Trà chanh gừng ô mai", price: 20000, cat: "Trà nóng" },
+  { id: 25, name: "Trà atiso", price: 20000, cat: "Trà nóng" },
+  { id: 26, name: "Trà thảo mộc", price: 25000, cat: "Trà nóng" },
+  { id: 27, name: "Matcha latte", price: 25000, cat: "Trà nóng" },
+  // --- Trà ---
+  { id: 28, name: "Trà sữa truyền thống (Size M)", price: 15000, cat: "Trà" },
+  { id: 29, name: "Trà sữa truyền thống (Size L)", price: 20000, cat: "Trà" },
+  { id: 30, name: "Trà sữa matcha (Size M)", price: 20000, cat: "Trà" },
+  { id: 31, name: "Trà sữa matcha (Size L)", price: 25000, cat: "Trà" },
+  { id: 32, name: "Trà sữa socola (Size M)", price: 20000, cat: "Trà" },
+  { id: 33, name: "Trà sữa socola (Size L)", price: 25000, cat: "Trà" },
+  { id: 34, name: "Trà sữa khoai môn (Size M)", price: 20000, cat: "Trà" },
+  { id: 35, name: "Trà sữa khoai môn (Size L)", price: 25000, cat: "Trà" },
+  { id: 36, name: "Trà đào (Size M)", price: 15000, cat: "Trà" },
+  { id: 37, name: "Trà đào (Size L)", price: 20000, cat: "Trà" },
+  { id: 38, name: "Trà đào cam xả (Size M)", price: 20000, cat: "Trà" },
+  { id: 39, name: "Trà đào cam xả (Size L)", price: 25000, cat: "Trà" },
+  { id: 40, name: "Trà vải (Size M)", price: 15000, cat: "Trà" },
+  { id: 41, name: "Trà vải (Size L)", price: 20000, cat: "Trà" },
+  { id: 42, name: "Trà tắc (Size M)", price: 15000, cat: "Trà" },
+  { id: 43, name: "Trà tắc (Size L)", price: 20000, cat: "Trà" },
+  { id: 44, name: "Trà chanh (Size M)", price: 15000, cat: "Trà" },
+  { id: 45, name: "Trà chanh (Size L)", price: 20000, cat: "Trà" },
+  { id: 46, name: "Trà bưởi hồng (Size M)", price: 20000, cat: "Trà" },
+  { id: 47, name: "Trà bưởi hồng (Size L)", price: 25000, cat: "Trà" },
+  { id: 48, name: "Trà sen vàng kem (Size L)", price: 25000, cat: "Trà" },
+  { id: 49, name: "Trà chanh bạc hà (Size M)", price: 20000, cat: "Trà" },
+  { id: 50, name: "Trà chanh bạc hà (Size L)", price: 25000, cat: "Trà" },
+  { id: 51, name: "Trà xoài vàng (Size M)", price: 20000, cat: "Trà" },
+  { id: 52, name: "Trà xoài vàng (Size L)", price: 25000, cat: "Trà" },
+  { id: 53, name: "Trà dâu (Size M)", price: 20000, cat: "Trà" },
+  { id: 54, name: "Trà dâu (Size L)", price: 25000, cat: "Trà" },
+  { id: 55, name: "Trà ổi hồng chanh dây (Size M)", price: 20000, cat: "Trà" },
+  { id: 56, name: "Trà ổi hồng chanh dây (Size L)", price: 25000, cat: "Trà" },
+  { id: 57, name: "Trà nhãn hoa hồng (Size M)", price: 20000, cat: "Trà" },
+  { id: 58, name: "Trà nhãn hoa hồng (Size L)", price: 25000, cat: "Trà" },
+  { id: 59, name: "Trà ổi dâu (Size M)", price: 20000, cat: "Trà" },
+  { id: 60, name: "Trà ổi dâu (Size L)", price: 25000, cat: "Trà" },
+  { id: 61, name: "Trà xoài xanh xí muội (Size M)", price: 25000, cat: "Trà" },
+  { id: 62, name: "Trà xoài xanh xí muội (Size L)", price: 28000, cat: "Trà" },
+  { id: 63, name: "Trà lài đắc thơm (Size M)", price: 25000, cat: "Trà" },
+  { id: 64, name: "Trà lài đắc thơm (Size L)", price: 28000, cat: "Trà" },
+  { id: 65, name: "Trà cam hoa hồng (Size M)", price: 25000, cat: "Trà" },
+  { id: 66, name: "Trà cam hoa hồng (Size L)", price: 28000, cat: "Trà" },
+  { id: 67, name: "Trà trái cây mật ong (Size M)", price: 25000, cat: "Trà" },
+  { id: 68, name: "Trà trái cây mật ong (Size L)", price: 28000, cat: "Trà" },
+  { id: 69, name: "Trà trái cây (Size M)", price: 25000, cat: "Trà" },
+  { id: 70, name: "Trà trái cây (Size L)", price: 28000, cat: "Trà" },
+  { id: 71, name: "Trà bưởi hồng yakul (Size L)", price: 28000, cat: "Trà" },
+  { id: 72, name: "Trà dâu yakul (Size L)", price: 28000, cat: "Trà" },
+  { id: 73, name: "Trà la hán sương sáo (Size M)", price: 25000, cat: "Trà" },
+  { id: 74, name: "Trà la hán sương sáo (Size L)", price: 28000, cat: "Trà" },
+  // --- Matcha---
+  { id: 75, name: "Matcha sữa xoài (Size M)", price: 25000, cat: "Matcha" },
+{ id: 76, name: "Matcha sữa xoài (Size L)", price: 28000, cat: "Matcha" },
+{ id: 77, name: "Matcha latte (Size M)", price: 25000, cat: "Matcha" },
+{ id: 78, name: "Matcha latte (Size L)", price: 28000, cat: "Matcha" },
+{ id: 79, name: "Matcha sữa dừa (Size M)", price: 25000, cat: "Matcha" },
+{ id: 80, name: "Matcha sữa dừa (Size L)", price: 28000, cat: "Matcha" },
+{ id: 81, name: "Matcha khoai môn (Size M)", price: 25000, cat: "Matcha" },
+{ id: 82, name: "Matcha khoai môn (Size L)", price: 28000, cat: "Matcha" },
+{ id: 83, name: "Matcha sữa hạt (Size M)", price: 25000, cat: "Matcha" },
+{ id: 84, name: "Matcha sữa hạt (Size L)", price: 28000, cat: "Matcha" },
+  // --- sữa chua ---
+{ id: 85, name: "Sữa chua thuần khiết", price: 20000, cat: "Sữa chua" },
+{ id: 86, name: "Sữa chua ổi", price: 25000, cat: "Sữa chua" },
+{ id: 87, name: "Sữa chua việt quất", price: 25000, cat: "Sữa chua" },
+{ id: 88, name: "Sữa chua nho", price: 25000, cat: "Sữa chua" },
+{ id: 89, name: "Sữa chua dâu", price: 25000, cat: "Sữa chua" },
+{ id: 90, name: "Sữa chua kiwi", price: 25000, cat: "Sữa chua" },
+{ id: 91, name: "Sữa chua xoài", price: 25000, cat: "Sữa chua" },
+{ id: 92, name: "Sữa chua chanh dây", price: 25000, cat: "Sữa chua" },
+{ id: 93, name: "Sữa chua hạt đác", price: 25000, cat: "Sữa chua" },
+{ id: 94, name: "Sữa chua yến mạch trái cây", price: 30000, cat: "Sữa chua" },
+  // --- Nước ép---
+{ id: 95, name: "Nước ép cà rốt", price: 25000, cat: "Nước ép" },
+{ id: 96, name: "Nước ép cam", price: 25000, cat: "Nước ép" },
+{ id: 97, name: "Nước ép dứa", price: 25000, cat: "Nước ép" },
+{ id: 98, name: "Nước ép táo", price: 25000, cat: "Nước ép" },
+{ id: 99, name: "Nước ép ổi", price: 25000, cat: "Nước ép" },
+{ id: 100, name: "Nước ép cam + cà rốt", price: 25000, cat: "Nước ép" },
+{ id: 101, name: "Nước ép cam + dứa", price: 25000, cat: "Nước ép" },
+{ id: 102, name: "Nước ép cà rốt + dứa", price: 25000, cat: "Nước ép" },
+  // --- Rau Má ---
+  { id: 103, name: "Rau má cốt dừa (Size M)", price: 15000, cat: "Rau má" },
+{ id: 104, name: "Rau má cốt dừa (Size L)", price: 20000, cat: "Rau má" },
+{ id: 105, name: "Rau má đậu xanh (Size M)", price: 15000, cat: "Rau má" },
+{ id: 106, name: "Rau má đậu xanh (Size L)", price: 20000, cat: "Rau má" },
+{ id: 107, name: "Đậu xanh sữa dừa (Size M)", price: 20000, cat: "Rau má" },
+{ id: 108, name: "Đậu xanh sữa dừa (Size L)", price: 25000, cat: "Rau má" },
+ // --- Sinh Tố ---
+{ id: 109, name: "Sinh tố dứa", price: 25000, cat: "Sinh tố" },
+{ id: 110, name: "Sinh tố dâu", price: 25000, cat: "Sinh tố" },
+{ id: 111, name: "Sinh tố nho", price: 25000, cat: "Sinh tố" },
+{ id: 112, name: "Sinh tố kiwi", price: 25000, cat: "Sinh tố" },
+{ id: 113, name: "Sinh tố việt quất", price: 25000, cat: "Sinh tố" },
+{ id: 114, name: "Sinh tố xoài", price: 25000, cat: "Sinh tố" },
+{ id: 115, name: "Sinh tố ổi", price: 25000, cat: "Sinh tố" },
+{ id: 116, name: "Sinh tố Sampo / bơ (theo mùa)", price: 25000, cat: "Sinh tố" },
+  // ---Đá xay --- 
+{ id: 117, name: "Đá xay Socola", price: 25000, cat: "Đá xay" },
+{ id: 118, name: "Đá xay Matcha", price: 25000, cat: "Đá xay" },
+{ id: 119, name: "Đá xay Khoai môn", price: 25000, cat: "Đá xay" },
+  // ---Giải khát --- 
+{ id: 120, name: "Bò húc", price: 18000, cat: "Giải khát" },
+{ id: 121, name: "Nước các loại", price: 15000, cat: "Giải khát" },
+{ id: 122, name: "Cóc tai (Size M)", price: 15000, cat: "Giải khát" },
+{ id: 123, name: "Cóc tai (Size L)", price: 20000, cat: "Giải khát" },
+{ id: 124, name: "Chanh đá", price: 15000, cat: "Giải khát" },
+{ id: 125, name: "Chanh muối", price: 15000, cat: "Giải khát" },
+{ id: 126, name: "Soda Blue", price: 25000, cat: "Giải khát" },
+// Ăn vặt
+{ id: 127, name: "Bánh tráng ruốc nhỏ", price: 17000, cat: "Ăn vặt" },
+{ id: 128, name: "Bánh tráng ruốc lớn", price: 30000, cat: "Ăn vặt" },
+{ id: 129, name: "Tráng vỏ", price: 10000, cat: "Ăn vặt" },
+{ id: 130, name: "Tráng chấm", price: 15000, cat: "Ăn vặt" },
+  // Thuốc lá
+{ id: 131, name: "Mèo lớn", price: 26000, cat: "Thuốc lá" },
+{ id: 132, name: "Mèo nhỏ", price: 17000, cat: "Thuốc lá" },
+{ id: 133, name: "Sài Gòn", price: 16000, cat: "Thuốc lá" },
+{ id: 134, name: "Batto", price: 12000, cat: "Thuốc lá" }
+  
 ];
-
-let CATEGORIES = ["Cà phê","Trà sữa","Sinh tố","Sữa chua","Giải khát","Trà & Nước ép","Matcha","Ăn vặt","Topping"];
 let TABLES = [];
+let CATEGORIES = ["Tìm kiếm","Cà phê","Trà nóng","Trà","Matcha","Sữa chua","Nước ép","Rau má","Sinh tố","Đá xay","Giải khát","Ăn vặt","Thuốc lá"];
+
 
 // ✅ Migration: đảm bảo mỗi item trong cart có locked và baseQty
 TABLES = TABLES.map(t => ({
@@ -116,8 +184,8 @@ let GUEST_CNT = 0;
 
 let currentTable = null;
 let createdFromMain = false;
-let activeCategory = 'Cà phê';
-
+let activeCategory = 'Tìm kiếm';
+let searchKeyword = "";
 // helpers
 function showCustomAlert(msg) {
   document.getElementById("customAlertMessage").innerText = msg;
@@ -167,8 +235,17 @@ async function saveAll(){
     console.error("❌ Lỗi lưu online:", err); 
   }
 }
+// Hàm tìm kiếm
+function removeVietnameseTones(str) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // bỏ dấu
+    .replace(/đ/g, "d").replace(/Đ/g, "D")
+    .replace(/\s+/g, "")             // bỏ khoảng trắng
+    .toLowerCase();
+}
 
-
+// Cloud fare
 function listenAll(){
   try {
     // --- Menu ---
@@ -532,30 +609,122 @@ function goBack(){
   backToTables();
 }
 // categories
-function renderCategories(){
-  const bar = $('category-bar'); bar.innerHTML = '';
-  CATEGORIES.forEach(cat=>{
-    const b = document.createElement('button'); b.className='category-btn' + (cat===activeCategory ? ' active' : '');
-    b.innerText = cat;
-    b.onclick = ()=>{ activeCategory = cat; renderMenuList(); renderCategories(); };
-    bar.appendChild(b);
+function renderCategories() {
+  const bar = $('category-bar'); 
+  bar.innerHTML = '';
+
+  CATEGORIES.forEach(cat => {
+    if (cat === "Tìm kiếm") {
+      // Tab đặc biệt: input search
+      const searchTab = document.createElement('div');
+      searchTab.className = 'search-tab';
+
+      const searchInput = document.createElement('input');
+      searchInput.id = 'menu-search';
+      searchInput.type = 'text';
+      searchInput.placeholder = 'Nhập món cần tìm...';
+
+      // ✅ Khi click vào ô tìm kiếm
+      searchInput.addEventListener('focus', () => {
+        if (activeCategory !== "Tìm kiếm") {
+          activeCategory = "Tìm kiếm";
+          renderMenuList();
+
+          // ✅ Render lại thanh và focus lại ô mới sau 50ms
+          setTimeout(() => {
+            renderCategories();
+            const newInput = $('menu-search');
+            if (newInput) newInput.focus(); // tự focus lại
+          }, 50);
+        }
+      });
+
+      // Khi gõ => lọc menu
+      searchInput.addEventListener('input', (e) => {
+        searchKeyword = e.target.value;
+        renderMenuList();
+      });
+
+      // Hiển thị lại nội dung nếu đang ở tab tìm kiếm
+      searchInput.value = (activeCategory === "Tìm kiếm") ? searchKeyword : '';
+
+      searchTab.appendChild(searchInput);
+      bar.appendChild(searchTab);
+
+    } else {
+      // Tab danh mục bình thường
+      const b = document.createElement('button'); 
+      b.className = 'category-btn' + (cat === activeCategory ? ' active' : '');
+      b.innerText = cat;
+      b.onclick = () => { 
+        searchKeyword = '';  
+        activeCategory = cat; 
+        renderMenuList(); 
+        renderCategories(); 
+      };
+      bar.appendChild(b);
+    }
   });
 }
-
 // menu list
 function renderMenuList(){
-  const list = $('menu-list'); list.innerHTML = '';
-  const items = MENU.filter(m=> activeCategory==='Tất cả' ? true : m.cat===activeCategory);
-  items.forEach(item=>{
-    const row = document.createElement('div'); row.className='menu-row';
-    const left = document.createElement('div'); left.className='menu-left';
-    left.innerHTML = '<div class="menu-name">'+item.name+'</div><div class="menu-price">'+fmtV(item.price)+' VND</div>';
-    const controls = document.createElement('div'); controls.className='qty-controls';
-    const minus = document.createElement('button'); minus.className='btn btn-secondary'; minus.innerText='-'; minus.onclick=(e)=>{ e.stopPropagation(); changeQty(item.id,-1); };
-    const qty = document.createElement('span'); qty.id='qty-'+item.id; qty.innerText = getQty(item.id);
-    const plus = document.createElement('button'); plus.className='btn btn-secondary'; plus.innerText='+'; plus.onclick=(e)=>{ e.stopPropagation(); changeQty(item.id,1); };
-    controls.appendChild(minus); controls.appendChild(qty); controls.appendChild(plus);
-    row.appendChild(left); row.appendChild(controls);
+  const list = $('menu-list');
+  list.innerHTML = '';
+
+  const items = MENU.filter(m => {
+    const normalizedName = removeVietnameseTones(m.name);
+    const normalizedSearch = removeVietnameseTones(searchKeyword);
+
+    if (activeCategory === "Tìm kiếm") {
+      // Nếu đang ở tab Tìm kiếm
+      if (!searchKeyword.trim()) return true; // chưa nhập -> hiện toàn bộ menu
+      return normalizedName.includes(normalizedSearch); // có nhập -> lọc theo tên
+    } else {
+      // Các danh mục khác giữ nguyên như cũ
+      return activeCategory === 'Tất cả' ? true : m.cat === activeCategory;
+    }
+  });
+
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'menu-row';
+
+    const left = document.createElement('div');
+    left.className = 'menu-left';
+    left.innerHTML = `
+      <div class="menu-name">${item.name}</div>
+      <div class="menu-price">${fmtV(item.price)} VND</div>
+    `;
+
+    const controls = document.createElement('div');
+    controls.className = 'qty-controls';
+
+    const minus = document.createElement('button');
+    minus.className = 'btn btn-secondary';
+    minus.innerText = '-';
+    minus.onclick = (e) => { 
+      e.stopPropagation(); 
+      changeQty(item.id, -1); 
+    };
+
+    const qty = document.createElement('span');
+    qty.id = 'qty-'+item.id;
+    qty.innerText = getQty(item.id);
+
+    const plus = document.createElement('button');
+    plus.className = 'btn btn-secondary';
+    plus.innerText = '+';
+    plus.onclick = (e) => { 
+      e.stopPropagation(); 
+      changeQty(item.id, 1); 
+    };
+
+    controls.appendChild(minus);
+    controls.appendChild(qty);
+    controls.appendChild(plus);
+
+    row.appendChild(left);
+    row.appendChild(controls);
     list.appendChild(row);
   });
 }
